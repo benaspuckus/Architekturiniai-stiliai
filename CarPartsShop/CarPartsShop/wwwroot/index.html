@@ -4,16 +4,18 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="css/angular-material.min.css">
     <title>ASP.NET Core</title>
-</head>
-<body ng-app="CarPartsShop">
-    <p>This is a test</p>
-    PDASKDPOKASPODKAS
-    <h1>THIS IS A TESt</h1>
-
     <script src="js/angular.js"></script>
-    <script src="js/angular-animate.min.js"></script>
-    <script src="js/angular-aria.min.js"></script>
-    <script src="js/angular-messages.min.js"></script>
-    <script src="js/angular-material.min.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/items.controller.js"></script>
+
+</head>
+<body ng-app="app">
+    <div ng-controller="ItemsController as controller">
+        <button ng-click="controller.getCategories()">Get Categories</button>
+        <div ng-if="items.loading">Loading...</div>
+        <div ng-if="items.error">{{ items.error }}</div>
+        <div>{{50*10}}</div>
+        <div>50</div>
+    </div>
 </body>
 </html>

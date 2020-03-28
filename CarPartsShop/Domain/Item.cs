@@ -10,13 +10,18 @@ namespace Domain
         {
         }
 
-        public Item(Guid parentId, string name, string description, double price)
+        private Item(Guid parentId, string name, string description, double price)
         {
             ItemId = Guid.NewGuid();
             ParentCategoryId = parentId;
             Name = name;
             Description = description;
             Price = price;
+        }
+
+        public static Item GetItem(Guid parentId, string name, string description, double price)
+        {
+            return new Item(parentId, name, description, price);
         }
 
         public Guid ItemId { get; private set; }

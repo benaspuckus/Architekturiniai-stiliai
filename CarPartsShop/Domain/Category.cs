@@ -30,10 +30,10 @@ namespace Domain
             return new Category(name, description, Guid.NewGuid(), parentItemId);
         }
 
-        public Guid CategoryId { get; }
-        public Guid? ParentCategoryId { get; }
-        public string Name { get; }
-        public string Description { get; }
+        public Guid CategoryId { get; private set; }
+        public Guid? ParentCategoryId { get; private set; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
 
         private readonly List<Category> _childCategories = new List<Category>();
         public IReadOnlyList<Category> ChildCategories => _childCategories;
@@ -49,6 +49,11 @@ namespace Domain
             }
 
             _childCategories.Add(category);
+        }
+
+        public void AddChildItem(Item item)
+        {
+            _childItems.Add(item);
         }
     }
 }
