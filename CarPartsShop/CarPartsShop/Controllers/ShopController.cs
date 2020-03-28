@@ -27,7 +27,7 @@ namespace CarPartsShop.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return new BadRequestObjectResult(ModelState);
+                    return BadRequest(ModelState);
                 }
 
                 var doesExist = await _categoryReadRepository.DoesCategoryExist(model.Name);
@@ -139,7 +139,7 @@ namespace CarPartsShop.Controllers
 
                 if (category == null)
                 {
-                    return new BadRequestObjectResult("Category was not found");
+                    return BadRequest("Category was not found");
                 }
 
                 _categoryWriteRepository.RemoveCategory(category);
