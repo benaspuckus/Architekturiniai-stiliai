@@ -3,6 +3,7 @@
 
 function ItemsController($http) {
     var vm = this;
+    vm.categories = [{ name: "Node", nodes: [] }];
 
     vm.getCategories = getCategories;
 

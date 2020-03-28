@@ -10,12 +10,29 @@
 
 </head>
 <body ng-app="app">
-    <div ng-controller="ItemsController as controller">
-        <button ng-click="controller.getCategories()">Get Categories</button>
-        <div ng-if="items.loading">Loading...</div>
-        <div ng-if="items.error">{{ items.error }}</div>
-        <div>{{50*10}}</div>
-        <div>50</div>
-    </div>
+
+    <script type="text/ng-template" id="treeRenderer">
+        {{category.name}}
+
+        <button ng-click="add(data)">Add node</button>
+        <button ng-click="delete(data)" ng-show="data.nodes.length > 0">Delete nodes</button>
+        <ul ng-if="category.childCategories">
+            <li ng-repeat="category in category.childCategories" ng-include="'treeRenderer'"></li>
+        </ul>
+
+    </script>
+
+<div ng-controller="ItemsController as controller">
+    <button ng-click="controller.getCategories()">Get Categories</button>
+    <div ng-if="controller.loading">Loading...</div>
+    <div ng-if="controller.error">{{ controller.error }}</div>
+    <div ng-if="!controller.myData.data">No categories found</div>
+    <ul>
+        <li ng-repeat="category in controller.myData.data" ng-include="'treeRenderer'"></li>
+    </ul>
+
+    <div>{{50*10}}</div>
+    <div>50</div>
+</div>
 </body>
 </html>
