@@ -51,6 +51,11 @@ namespace Domain
             _childCategories.Add(category);
         }
 
+        public void RemoveChildItem(Item item)
+        {
+            _childItems.Remove(item);
+        }
+
         public void AddChildItem(Item item)
         {
             _childItems.Add(item);

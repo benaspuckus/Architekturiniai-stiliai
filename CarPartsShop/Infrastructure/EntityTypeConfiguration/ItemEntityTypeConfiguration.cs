@@ -16,6 +16,7 @@ namespace Infrastructure.EntityTypeConfiguration
             builder.Property(x => x.ParentCategoryId).IsRequired();
             builder.Property(x => x.Name).IsRequired();
             builder.Property(x => x.Price).IsRequired();
+            builder.Property(x => x.ImageData);
             builder.Property(x => x.Description);
         }
     }

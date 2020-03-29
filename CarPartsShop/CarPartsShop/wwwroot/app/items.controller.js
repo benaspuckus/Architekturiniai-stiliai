@@ -1,87 +1,83 @@
 ﻿angular.module('app')
     .controller('ItemsController', ItemsController);
 
-function ItemsController($http) {
+function ItemsController($scope, $http, $routeParams) {
     var vm = this;
+    vm.currentCategoryId = $routeParams.id;
+    vm.isAddItemPressed = false;
+    vm.imageSrc = "";
 
-    vm.isCreateInitialCategoryPressed = false;
+    vm.getItems = getItems;
+    vm.addItem = addItem;
+    vm.removeItem = removeItem;
+    vm.expandAddItem = expandAddItem;
 
-    vm.getCategories = getCategories;
-    vm.addCategory = addCategory;
-    vm.addInitialCategory = addInitialCategory;
-    vm.expandCategory = expandCategory;
-    vm.removeCategory = removeCategory;
-    vm.categories = null;
-
-    function getCategories() {
+    function getItems() {
         vm.error = null;
         vm.loading = true;
-        $http.get("https://localhost:44376/api/GetCategories")
+        $http.get("https://localhost:44376/api/GetItems/" + vm.currentCategoryId)
             .then(function (response) {
-                vm.categories = response.data;
+                vm.items = response.data;
                 vm.loading = false;
-                console.log(response);
             }, function (response) {
                 displayResponseMessage(response);
             });
     };
 
-    function addCategory(categoryName, category) {
-        vm.error = null;
-        vm.loading = true;
-        var model = {name: categoryName, parentId: category.categoryId}
-        $http.post("https://localhost:44376/api/AddCategory", model)
-            .then(function (response) {
-                vm.loading = false;
-                vm.categories = getCategories();
-            }, function (response) {
-                displayResponseMessage(response);
-            });
-    }
+    function addItem(item) {
+        var file = $scope.myFile;
 
-    function addInitialCategory(categoryName) {
-        vm.error = null;
-        vm.loading = true;
-        console.log(categoryName);
-        var model = { name: categoryName}
-        $http.post("https://localhost:44376/api/AddCategory", model)
-            .then(function (response) {
-                vm.loading = false;
-                vm.categories = getCategories();
-            }, function (response) {
-                displayResponseMessage(response);
-            });
-    }
+        getBase64(file).then(
+            data => {
+                var model = {
+                    name: item.Name,
+                    parentCategoryId: vm.currentCategoryId,
+                    description: item.Description,
+                    price: item.Price,
+                    imageData: data
+                };
 
-    function removeCategory(categoryId) {
-        vm.error = null;
-        vm.loading = true;
-        $http.delete("https://localhost:44376/api/RemoveCategory/" + categoryId)
-            .then(function (response) {
-                vm.loading = false;
-                vm.categories = getCategories();
-            }, function (response) {
-                displayResponseMessage(response);
-            });
-    }
-
-    function expandCategory(id) {
-        console.log(id);
-        findNestedCategory(vm.categories, id, "childCategories");
-        console.log(vm.categories);
-    };
-
-    function findNestedCategory(arr, itemId, nestingKey) {
-        arr.reduce((a, item) => {
-                if (a) return a;
-            if (item.categoryId === itemId) {
-                console.log(item);
-                item.isExpanded = !item.isExpanded; return item;}
-                if (item[nestingKey]) return findNestedCategory(item[nestingKey], itemId, nestingKey);
-            },
-            null);
+                $http.post("https://localhost:44376/api/AddCategoryItem", model)
+                    .then(function (response) {
+                        vm.loading = false;
+                        vm.categories = getItems();
+                    }, function (response) {
+                        displayResponseMessage(response);
+                    });
+            }
+        );
 
     };
+
+    function removeItem(item) {
+        vm.error = null;
+        vm.loading = true;
+
+        var model = {categoryId : item.parentCategoryId, itemId: item.itemId}
+        $http.post("https://localhost:44376/api/RemoveCategoryItem", model)
+            .then(function (response) {
+                vm.loading = false;
+                vm.categories = getItems();
+            }, function (response) {
+                displayResponseMessage(response);
+            });
+
+
+    };
+
+    function getBase64(file) {
+        return new Promise((resolve, reject) => {
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    function expandAddItem() {
+        vm.isAddItemPressed = !vm.isAddItemPressed;
+    };
+
 
     function displayResponseMessage(response) {
         if (response.data.errors) {

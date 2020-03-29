@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CarPartsShop.Models;
@@ -43,7 +44,7 @@ namespace CarPartsShop.Controllers
                 if (model.ParentId.HasValue)
                 {
                     category = Category.CreateChildItem(model.Name, model.Description, model.ParentId.Value);
-                    var currentCategory = await _categoryReadRepository.GetCategory(model.ParentId.Value);
+                    var currentCategory = await _categoryReadRepository.GetCategoryWithChildren(model.ParentId.Value);
                     currentCategory.AddChildCategory(category);
                     returnModel = _categoryWriteRepository.UpdateCategory(currentCategory);
                 }
@@ -102,7 +103,7 @@ namespace CarPartsShop.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var category = await _categoryReadRepository.GetCategory(model.ParentCategoryId);
+                var category = await _categoryReadRepository.GetCategoryWithChildren(model.ParentCategoryId);
 
                 if (category == null)
                 {
@@ -110,9 +111,42 @@ namespace CarPartsShop.Controllers
                 }
 
                 var item = Item.GetItem(model.ParentCategoryId, model.Name, model.Description,
-                    model.Price);
+                    model.Price, model.ImageData);
 
                 category.AddChildItem(item);
+
+                var categoryModel = _categoryWriteRepository.UpdateCategory(category);
+                _categoryWriteRepository.SaveChanges();
+
+                return Ok(categoryModel);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("api/RemoveCategoryItem")]
+        public async Task<IActionResult> RemoveCategoryItem([FromBody] RemoveCategoryItemRequestModel model)
+        {
+            try
+            {
+                var category = await _categoryReadRepository.GetCategoryWithItems(model.CategoryId);
+
+                if (category == null)
+                {
+                    return BadRequest("Category does not exist");
+                }
+
+                var item = category.ChildItems.FirstOrDefault(x => x.ItemId == model.ItemId);
+
+                if (item == null)
+                {
+                    return BadRequest("Item does not exist");
+
+                }
+
+                category.RemoveChildItem(item);
 
                 var categoryModel = _categoryWriteRepository.UpdateCategory(category);
                 _categoryWriteRepository.SaveChanges();
@@ -135,7 +169,7 @@ namespace CarPartsShop.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var category = await _categoryReadRepository.GetCategory(categoryId);
+                var category = await _categoryReadRepository.GetCategoryWithChildren(categoryId);
 
                 if (category == null)
                 {

@@ -4,49 +4,28 @@
     <meta charset="utf-8" />
     <title>ASP.NET Core</title>
     <script src="js/angular.js"></script>
-    <script src="app/app.js"></script>
+    <script src="js/angular-route.js"></script>
+    <script src="app/app.module.js"></script>
+    <script src="app/app.config.js"></script>
+    <script src="app/main.controller.js"></script>
     <script src="app/items.controller.js"></script>
+    <script src="/app/categories.controller.js"></script>
+    <script src="app/app.directive.js"></script>
     <link href="css/styles.css" rel="stylesheet" />
-
 </head>
 <body ng-app="app">
-    <div ng-controller="ItemsController as controller">
+    <div ng-controller="MainController as controller">
 
-        <script type="text/ng-template" id="treeRenderer.html">
-            <div class="category-item" ng-click="controller.expandCategory(category.categoryId)">{{category.name}}</div>
-            <div ng-show="category.isExpanded">
-                <input ng-model="newCategoryName"type="text" placeholder="Enter category name">
+        <div class="flex-container">
+            <div class="sidewall"></div>
+
+            <div class="main-content">
+                <h1>Car parts online shop</h1>
+                <div ng-view></div>
             </div>
-            <div ng-show="category.isExpanded">
-                <button ng-click="controller.addCategory(newCategoryName, category)">Add category</button>
-                <button ng-if="category.childCategories.length === 0" ng-click="controller.removeCategory(category.categoryId)">Delete category</button>
-            </div>
-            <ul ng-if="category.childCategories">
-                <li ng-repeat="category in category.childCategories" ng-include="'treeRenderer.html'"></li>
-            </ul>
-        </script>
-    <div class="flex-container">
-        <div class="sidewall" ></div>
-        <div class="main-content">
-            <h1>Car parts online shop</h1>
-            <button ng-click="controller.getCategories()" class="button">Get Categories</button>
-            <br/>
-            <button ng-click="controller.isCreateInitialCategoryPressed = true" class="button">Add initial category</button>
-            <div ng-show="controller.isCreateInitialCategoryPressed">
-                <input ng-model="newInitialCategoryName"  type="text" placeholder="Enter initial category name">
-                <button ng-click="controller.addInitialCategory(newInitialCategoryName)">Add initial category</button>
-            </div>
-            <div ng-if="controller.loading">Loading...</div>
-            <div ng-if="controller.error">{{ controller.error }}</div>
-            <ul>
-                <li ng-repeat="category in controller.categories" ng-include="'treeRenderer.html'"></li>
-            </ul>
+
+            <div class="sidewall"></div>
         </div>
-        <div class="sidewall">
-
-        </div>
-
-    </div>
     </div>
 </body>
 </html>

@@ -21,9 +21,29 @@ namespace CarPartsShop.Controllers
         {
             try
             {
-                var categories = await _categoryReadRepository.GetAllCategoriesWithChildCategoriesAsync();
+                var categories = await _categoryReadRepository.GetAllCategoriesWithChildCategoriesAndItemsAsync();
 
                 return Ok(categories);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("api/GetItems/{categoryId}")]
+        public async Task<IActionResult> GetAllCategories(Guid categoryId)
+        {
+            try
+            {
+                var category = await _categoryReadRepository.GetCategoryWithItems(categoryId);
+
+                if (category == null)
+                {
+                    return BadRequest("Category not found");
+                }
+
+                return Ok(category.ChildItems);
             }
             catch (Exception ex)
             {

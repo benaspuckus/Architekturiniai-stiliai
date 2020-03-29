@@ -10,9 +10,10 @@ namespace Infrastructure
 {
     public interface ICategoryReadRepository
     {
-        Task<List<Category>> GetAllCategoriesWithChildCategoriesAsync();
-        Task<Category> GetCategory(Guid categoryId);
+        Task<List<Category>> GetAllCategoriesWithChildCategoriesAndItemsAsync();
+        Task<Category> GetCategoryWithChildren(Guid categoryId);
         Task<bool> DoesCategoryExist(string categoryName);
+        Task<Category> GetCategoryWithItems(Guid categoryId);
     }
     public class CategoryReadRepository : ICategoryReadRepository
     {
@@ -32,7 +33,7 @@ namespace Infrastructure
             return category != null;
         }
 
-        public async Task<Category> GetCategory(Guid categoryId)
+        public async Task<Category> GetCategoryWithChildren(Guid categoryId)
         {
             var category = await _context
                 .Categories
@@ -44,7 +45,17 @@ namespace Infrastructure
             return category;
         }
 
-        public async Task<List<Category>> GetAllCategoriesWithChildCategoriesAsync()
+        public async Task<Category> GetCategoryWithItems(Guid categoryId)
+        {
+            var category = await _context
+                .Categories
+                .Include(x => x.ChildItems)
+                .FirstOrDefaultAsync(x => x.CategoryId == categoryId);
+
+            return category;
+        }
+
+        public async Task<List<Category>> GetAllCategoriesWithChildCategoriesAndItemsAsync()
         {
             var categories = await _context
                 .Categories

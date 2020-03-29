@@ -1,27 +1,43 @@
 ﻿.category-item {
     color: black;
-    cursor: pointer
+    cursor: pointer;
+    width: 70px;
 }
 
 .category-item:hover {
     color: blue;
     cursor: pointer;
     text-decoration: underline;
+    width: 100px;
 }
 
 .flex-container {
     display: flex;
+    min-height: -webkit-fill-available;
 }
 
 .sidewall {
     flex-grow: 2;
     background: gray;
-    height: 700px;
 }
 
 .main-content {
     flex-grow: 6;
-    margin: 20px;
+    background: antiquewhite;
+    padding: 10px;
+}
+
+.item-blocks {
+    border-style: solid;
+    margin-bottom: 10px;
+}
+
+.item-view {
+    text-align: center;
+}
+
+.item-info {
+    font-weight: bold
 }
 
 li {
@@ -30,6 +46,18 @@ li {
 
 h1 {
     text-align: center;
+}
+
+input {
+    margin: 2px;
+}
+
+form {
+    margin: 2px;
+}
+
+label {
+    margin: 2px;
 }
 
 .button {
@@ -51,6 +79,3 @@ h1 {
     background-color: #555555;
     color: white;
 }
-
-
-

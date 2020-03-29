@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>ASP.NET Core</title>
+    <script src="../js/angular.js"></script>
+    <link href="../css/styles.css" rel="stylesheet" />
+
+</head>
+<body ng-app="app">
+    <div ng-controller="ItemsController as controller" ng-init="controller.getItems()">
+        <button class="button" ng-click="controller.expandAddItem()">Add item</button><br />
+        <div ng-show="controller.isAddItemPressed">
+            <form name="createItem">
+                <label>Name:</label><br />
+                <input ng-model="item.Name" type="text" placeholder="Enter category name" name="name" required><br />
+                <label>Price:</label><br />
+                <input ng-model="item.Price" type="number" placeholder="Enter category price" name="price" required><br />
+                <label>Description:</label><br />
+                <input ng-model="item.Description" type="text" placeholder="Enter category description" name="description" required><br />
+                <div>
+                    <label for="myFileField">Select a file: </label>
+                    <input type="file" demo-file-model="myFile" id="myFileField" />
+                </div>
+                <input type="submit" ng-click="controller.addItem(item)" value="Create item" /><br />
+            </form>
+        </div>
+
+        <div class="item-view">
+            <div class="item-blocks"ng-repeat="item in controller.items">
+                <span class="item-info">Item name:</span>
+                {{item.name}}<br>
+                <span class="item-info">Item price:</span>
+                {{item.price}} €<br>
+                <span class="item-info">Item description:</span>
+                {{item.description}}<br><br>
+                <img style="width:200px;height:200px" ng-src="{{item.imageData ? item.imageData : 'images/stockImage.png'}}" /><br>
+                <button ng-click="controller.removeItem(item)">Remove</button>
+                <br><br>
+            </div>
+        </div>
+        <a href="#"><button class="button">Go back</button></a>
+        <div ng-if="controller.loading">Loading...</div>
+    <div ng-if="controller.error">{{ controller.error }}</div>
+
+</div>
+</body>
+</html>
