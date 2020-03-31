@@ -1,7 +1,7 @@
 ﻿angular.module('app')
     .controller('ItemsController', ItemsController);
 
-function ItemsController($scope, $http, $routeParams) {
+function ItemsController($scope, $http, $routeParams, $location) {
     var vm = this;
     vm.currentCategoryId = $routeParams.id;
     vm.isAddItemPressed = false;
@@ -11,6 +11,7 @@ function ItemsController($scope, $http, $routeParams) {
     vm.addItem = addItem;
     vm.removeItem = removeItem;
     vm.expandAddItem = expandAddItem;
+    vm.goToItemInfo = goToItemInfo;
 
     function getItems() {
         vm.error = null;
@@ -64,6 +65,11 @@ function ItemsController($scope, $http, $routeParams) {
 
 
     };
+
+    function goToItemInfo(item) {
+        console.log("test");
+        $location.path("/manageItems/" + vm.currentCategoryId + "/" + item.itemId);
+    }
 
     function getBase64(file) {
         return new Promise((resolve, reject) => {

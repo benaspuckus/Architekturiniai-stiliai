@@ -126,6 +126,44 @@ namespace CarPartsShop.Controllers
             }
         }
 
+        [HttpPut("api/UpdateCategoryItem")]
+        public async Task<IActionResult> UpdateCategoryItem([FromBody] UpdateCategoryItemRequestModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var category = await _categoryReadRepository.GetCategoryWithItems(model.ParentCategoryId);
+
+                if (category == null)
+                {
+                    return BadRequest("Category does not exist");
+                }
+
+                var item = category.ChildItems.FirstOrDefault(x => x.ItemId == model.ItemId);
+
+                if (item == null)
+                {
+                    return BadRequest("Item does not exist");
+                }
+
+                item.UpdateItem(model.Name, model.Description, model.Price);
+
+
+                var categoryModel = _categoryWriteRepository.UpdateCategory(category);
+                _categoryWriteRepository.SaveChanges();
+
+                return Ok(categoryModel);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("api/RemoveCategoryItem")]
         public async Task<IActionResult> RemoveCategoryItem([FromBody] RemoveCategoryItemRequestModel model)
         {

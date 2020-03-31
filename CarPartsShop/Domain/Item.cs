@@ -31,5 +31,12 @@ namespace Domain
         public string Description { get; private set; }
         public double Price { get; private set; }
         public string ImageData { get; private set; }
+
+        public void UpdateItem(string name, string description, double price)
+        {
+            Name = string.IsNullOrEmpty(name) ? Name : name;
+            Description = string.IsNullOrEmpty(description) ? Description : description;
+            Price = price != 0 ? price : Price;
+        }
     }
 }

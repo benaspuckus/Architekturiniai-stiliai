@@ -50,5 +50,32 @@ namespace CarPartsShop.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("api/GetItems/{categoryId}/{itemId}")]
+        public async Task<IActionResult> GetSingleItem(Guid categoryId, Guid itemId)
+        {
+            try
+            {
+                var category = await _categoryReadRepository.GetCategoryWithItems(categoryId);
+
+                if (category == null)
+                {
+                    return BadRequest("Category not found");
+                }
+
+                var item = category.ChildItems.FirstOrDefault(x => x.ItemId == itemId);
+
+                if (item == null)
+                {
+                    return BadRequest("Item was not found");
+                }
+
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

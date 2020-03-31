@@ -13,5 +13,10 @@ angular.module('app')
                 templateUrl: 'pages/manageItems.html',
                 controller: 'ItemsController'
             })
+        .when('/manageItems/:id/:itemId',
+            {
+                templateUrl: 'pages/viewItem.html',
+                controller: 'SingleItemController'
+            })
         .otherwise('/');
 });

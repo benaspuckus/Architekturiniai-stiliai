@@ -21,6 +21,20 @@
     background: gray;
 }
 
+.item-image {
+    width: 200px;
+    height: 200px;
+}
+
+textarea {
+    width: 300px;
+    height: 80px;
+}
+
+.item-image:hover {
+    cursor: pointer;
+}
+
 .main-content {
     flex-grow: 6;
     background: antiquewhite;

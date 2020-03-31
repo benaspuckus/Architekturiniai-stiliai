@@ -32,9 +32,7 @@
                 {{item.name}}<br>
                 <span class="item-info">Item price:</span>
                 {{item.price}} €<br>
-                <span class="item-info">Item description:</span>
-                {{item.description}}<br><br>
-                <img style="width:200px;height:200px" ng-src="{{item.imageData ? item.imageData : 'images/stockImage.png'}}" /><br>
+                <img class="item-image" ng-click="controller.goToItemInfo(item)" ng-src="{{item.imageData ? item.imageData : 'images/stockImage.png'}}" /><br>
                 <button ng-click="controller.removeItem(item)">Remove</button>
                 <br><br>
             </div>

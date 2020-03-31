@@ -12,6 +12,7 @@ function CategoriesController($http, $location) {
     vm.expandCategory = expandCategory;
     vm.removeCategory = removeCategory;
     vm.goToManageItems = goToManageItems;
+    vm.pressCreateInitialCategory = pressCreateInitialCategory;
     vm.categories = null;
 
     function getCategories() {
@@ -38,6 +39,10 @@ function CategoriesController($http, $location) {
                 displayResponseMessage(response);
             });
     }
+
+    function pressCreateInitialCategory() {
+        vm.isCreateInitialCategoryPressed = !vm.isCreateInitialCategoryPressed;
+    };
 
     function addInitialCategory(categoryName) {
         vm.error = null;
@@ -80,7 +85,7 @@ function CategoriesController($http, $location) {
     };
 
     function goToManageItems(categoryId) {
-       $location.path("/manageItems/" + categoryId)
+        $location.path("/manageItems/" + categoryId);
     }
 
     function displayResponseMessage(response) {

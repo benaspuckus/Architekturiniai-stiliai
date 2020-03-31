@@ -28,7 +28,7 @@
         </script>
         <button ng-click="controller.getCategories()" class="button">Get Categories</button>
         <br />
-        <button ng-click="controller.isCreateInitialCategoryPressed = true" class="button">Add initial category</button>
+        <button ng-click="controller.pressCreateInitialCategory()" class="button">Add initial category</button>
         <div ng-show="controller.isCreateInitialCategoryPressed">
             <input ng-model="newInitialCategoryName" type="text" placeholder="Enter initial category name">
             <button ng-click="controller.addInitialCategory(newInitialCategoryName)">Add initial category</button>

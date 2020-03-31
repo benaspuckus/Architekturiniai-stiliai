@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>ASP.NET Core</title>
+    <script src="../js/angular.js"></script>
+    <link href="../css/styles.css" rel="stylesheet" />
+
+</head>
+<body ng-app="app">
+    <div ng-controller="SingleItemController as controller" ng-init="controller.getItemInfo()">
+
+        <img style="width:300px;height:300px" ng-src="{{fetchedItem.imageData ? fetchedItem.imageData : 'images/stockImage.png'}}" /><br>
+        <label>Item name:</label>
+        <input ng-disabled="!controller.isModifyPressed" ng-model="newItem.Name" class="item-info" ng-value="fetchedItem.name" /><br>
+        <label>Item price:</label>
+        <input ng-disabled="!controller.isModifyPressed" type="number" ng-model="newItem.Price" class="item-info" ng-value=" fetchedItem.price" /><br><br />
+        <label>Item description:</label><br/>
+        <textarea ng-disabled="!controller.isModifyPressed" ng-model="newItem.Description" class="item-info" ng-value="fetchedItem.description"></textarea>
+        <br>
+        <button ng-if="controller.isModifyPressed" ng-click="controller.saveItem(newItem)">Save item</button>
+        <button ng-if="!controller.isModifyPressed" ng-click="controller.pressModify()">Modify</button><br /><br />
+        <a ng-href="#!/manageItems/{{controller.currentCategoryId}}"><button class="button">Go back</button></a>
+        <div ng-if="controller.loading">Loading...</div>
+        <div ng-if="controller.error">{{ controller.error }}</div>
+    </div>
+</body>
+</html>
