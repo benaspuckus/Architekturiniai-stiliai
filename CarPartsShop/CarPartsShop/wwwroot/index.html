@@ -13,6 +13,7 @@
     <script src="app/categories.controller.js"></script>
     <script src="app/account.controller.js"></script>
     <script src="app/app.directive.js"></script>
+    <script src="app/browseItems.controller.js"></script>
     <link href="css/styles.css" rel="stylesheet" />
 </head>
 <body ng-app="app">
@@ -23,12 +24,12 @@
 
             <div class="main-content">
                 <h1>Car parts online shop</h1>
-                <div ng-if="controller.loggedUserName">
+                <div class="account-info" ng-if="controller.loggedUserName">
                     <span>{{controller.loggedUserName}}</span>
                     <button ng-click="controller.logOut()">Log out</button>
                 </div>
-                <div ng-if="!controller.loggedUserName">
-                    <a href="#!register">Register</a>
+                <div class="account-info" ng-if="!controller.loggedUserName">
+                    <a href="#!register">Register</a><br/>
                     <a href="#!login">Login</a>
                 </div>
                 

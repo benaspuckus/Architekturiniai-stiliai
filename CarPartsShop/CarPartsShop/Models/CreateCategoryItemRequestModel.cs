@@ -19,5 +19,8 @@ namespace CarPartsShop.Models
         public double Price { get; set; }
 
         public string ImageData { get; set; }
+
+        public string OemNumber { get; set; }
+        public string PartNumber { get; set; }
     }
 }

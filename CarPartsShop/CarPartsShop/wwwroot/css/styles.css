@@ -35,6 +35,11 @@ textarea {
     cursor: pointer;
 }
 
+.center-form {
+    margin-top: 100px;
+    text-align: center;
+}
+
 .main-content {
     flex-grow: 6;
     background: antiquewhite;
@@ -72,6 +77,11 @@ form {
 
 label {
     margin: 2px;
+}
+
+.account-info {
+    text-align: right;
+    margin: 20px;
 }
 
 .button {

@@ -19,7 +19,7 @@
                 </form>
             </div>
             <div ng-show="category.isExpanded">
-                <button ng-if="category.childCategories.length === 0 && category.childItems.length === 0" ng-click="controller.removeCategory(category.categoryId)">Delete category</button>
+                <button ng-if="category.childCategories.length === 0 && category.childItems.length === 0" confirmed-click="controller.removeCategory(category.categoryId)" ng-confirm-click="Are you sure you want to delete {{category.name}}?">Delete category</button>
                 <button ng-if="category.childCategories.length === 0" ng-click="controller.goToManageItems(category.categoryId)">Manage items</button>
             </div>
             <ul ng-if="category.childCategories">

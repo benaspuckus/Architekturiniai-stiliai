@@ -2,11 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <link href="../css/styles.css" rel="stylesheet" />
     <title></title>
 </head>
 <body ng-app="app">
 <div ng-controller="AccountController as controller">
-    <form name="login">
+    <form class="center-form" name="login">
         <label>Email:</label><br />
         <input ng-model="login.Email" type="email" placeholder="Enter account email" name="name" required><br />
         <label>Password:</label><br />

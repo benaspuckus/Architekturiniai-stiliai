@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarPartsShop.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ShopViewController : ControllerBase
     {
         private readonly ICategoryReadRepository _categoryReadRepository;

@@ -18,6 +18,8 @@ namespace Infrastructure.EntityTypeConfiguration
             builder.Property(x => x.Price).IsRequired();
             builder.Property(x => x.ImageData);
             builder.Property(x => x.Description);
+            builder.Property(x => x.OemNumber);
+            builder.Property(x => x.PartNumber);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace CarPartsShop.Controllers
                 if (!result.Succeeded) return BadRequest(result.Errors);
                 await _userManager.AddToRoleAsync(user, "User");
                 await _signInManager.SignInAsync(user, false);
-                var accessToken = BuildToken(user);
+                var accessToken = await BuildToken(user);
 
                 return Ok(accessToken);
 
@@ -85,7 +85,7 @@ namespace CarPartsShop.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("api/Account/CheckStatus")]
         public IActionResult CheckStatus()
         {
@@ -94,6 +94,12 @@ namespace CarPartsShop.Controllers
 
 
             return Ok(email);
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpGet("api/Account/CheckAdminStatus")]
+        public IActionResult CheckAdminStatus()
+        {
+            return Ok();
         }
 
         private async Task<string> BuildToken(IdentityUser user)

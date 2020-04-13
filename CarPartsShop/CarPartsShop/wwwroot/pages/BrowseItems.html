@@ -1,0 +1,15 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body ng-app="app">
+    <div ng-controller="BrowseItemsController as controller" ng-init="controller.checkAdminStatus()" style="text-align: center">
+        <h1>WELCOME TO MAIN PAGE</h1>
+        <button class="button" ng-if="controller.adminStatus" ng-click="controller.goToEditCategories()">Edit Categories</button>
+        <button class="button" ng-if="controller.isSimpleUserLoggedIn()" ng-click="controller.goToShoppingCart()">Shopping cart</button>
+
+    </div>
+</body>
+</html>

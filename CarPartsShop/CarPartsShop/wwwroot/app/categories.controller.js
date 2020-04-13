@@ -1,7 +1,7 @@
 ﻿angular.module('app')
     .controller('CategoriesController', CategoriesController);
 
-function CategoriesController($http, $location) {
+function CategoriesController($http, $location, $window) {
     var vm = this;
 
     vm.isCreateInitialCategoryPressed = false;
@@ -14,11 +14,13 @@ function CategoriesController($http, $location) {
     vm.goToManageItems = goToManageItems;
     vm.pressCreateInitialCategory = pressCreateInitialCategory;
     vm.categories = null;
+    vm.token = $window.localStorage.getItem('token');
+    vm.config = { "headers": { "Authorization": "Bearer " + vm.token} }
 
     function getCategories() {
         vm.error = null;
         vm.loading = true;
-        $http.get("https://localhost:44376/api/GetCategories")
+        $http.get("https://localhost:44376/api/GetCategories", vm.config)
             .then(function (response) {
                 vm.categories = response.data;
                 vm.loading = false;
@@ -31,7 +33,7 @@ function CategoriesController($http, $location) {
         vm.error = null;
         vm.loading = true;
         var model = {name: categoryName, parentId: category.categoryId}
-        $http.post("https://localhost:44376/api/AddCategory", model)
+        $http.post("https://localhost:44376/api/AddCategory", model, vm.config)
             .then(function (response) {
                 vm.loading = false;
                 vm.categories = getCategories();
@@ -48,7 +50,7 @@ function CategoriesController($http, $location) {
         vm.error = null;
         vm.loading = true;
         var model = { name: categoryName}
-        $http.post("https://localhost:44376/api/AddCategory", model)
+        $http.post("https://localhost:44376/api/AddCategory", model, vm.config)
             .then(function (response) {
                 vm.loading = false;
                 vm.categories = getCategories();
@@ -60,7 +62,7 @@ function CategoriesController($http, $location) {
     function removeCategory(categoryId) {
         vm.error = null;
         vm.loading = true;
-        $http.delete("https://localhost:44376/api/RemoveCategory/" + categoryId)
+        $http.delete("https://localhost:44376/api/RemoveCategory/" + categoryId, vm.config)
             .then(function (response) {
                 vm.loading = false;
                 vm.categories = getCategories();
@@ -89,6 +91,10 @@ function CategoriesController($http, $location) {
     }
 
     function displayResponseMessage(response) {
+        if (response.status === 401 || response.status === 403) {
+            $location.path("/");
+        }
+
         if (response.data.errors) {
             vm.error = response.data.errors.Name.join();
         }

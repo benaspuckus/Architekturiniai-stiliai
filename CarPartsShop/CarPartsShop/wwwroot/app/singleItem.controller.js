@@ -1,7 +1,7 @@
 ﻿angular.module('app')
     .controller('SingleItemController', SingleItemController);
 
-function SingleItemController($http, $routeParams, $scope) {
+function SingleItemController($http, $routeParams, $scope, $window, $location) {
     var vm = this;
     vm.currentCategoryId = $routeParams.id;
     vm.currentItemId = $routeParams.itemId;
@@ -11,10 +11,13 @@ function SingleItemController($http, $routeParams, $scope) {
     vm.item = null;
     vm.isModifyPressed = false;
 
+    vm.token = $window.localStorage.getItem('token');
+    vm.config = { "headers": { "Authorization": "Bearer " + vm.token } }
+
     function getItemInfo() {
         vm.error = null;
         vm.loading = true;
-        $http.get("https://localhost:44376/api/GetItems/" + vm.currentCategoryId + "/" + vm.currentItemId)
+        $http.get("https://localhost:44376/api/GetItems/" + vm.currentCategoryId + "/" + vm.currentItemId, vm.config)
             .then(function (response) {
                 vm.testItem = response.data;
                 $scope.fetchedItem = response.data;
@@ -28,9 +31,9 @@ function SingleItemController($http, $routeParams, $scope) {
     function saveItem(item) {
         vm.error = null;
         vm.loading = true;
-        var model = { name: item.Name, price: item.Price, description: item.Description, parentCategoryId: vm.currentCategoryId, itemId: vm.currentItemId }
+        var model = { name: item.Name, price: item.Price, description: item.Description, parentCategoryId: vm.currentCategoryId, itemId: vm.currentItemId, oemNumber: item.Oem, partNumber: item.Part}
         console.log(model);
-        $http.put("https://localhost:44376/api/UpdateCategoryItem", model)
+        $http.put("https://localhost:44376/api/UpdateCategoryItem", model, vm.config)
             .then(function (response) {
                 vm.loading = false;
                 vm.categories = getItemInfo();
@@ -45,6 +48,10 @@ function SingleItemController($http, $routeParams, $scope) {
     };
 
     function displayResponseMessage(response) {
+        if (response.status === 401 || response.status === 403) {
+            $location.path("/");
+        }
+
         if (response.data.errors) {
             vm.error = response.data.errors.Name.join();
         }

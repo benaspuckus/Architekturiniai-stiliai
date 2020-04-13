@@ -7,6 +7,7 @@ function AccountController($location, $http, $window) {
     vm.createAccount = createAccount;
     vm.login = login;
 
+
     function createAccount(account) {
         vm.error = null;
         vm.loading = true;
@@ -14,13 +15,12 @@ function AccountController($location, $http, $window) {
         $http.post("https://localhost:44376/api/Account/Register", model)
             .then(function (response) {
                 $window.localStorage.setItem('token', response.data);
-                console.log(response.data);
-                $location.path("/");
                 vm.loading = false;
                 $window.location.reload();
             }, function (response) {
                 displayResponseMessage(response);
             });
+        $location.path("/");
     };
 
     function login(account) {
@@ -29,18 +29,22 @@ function AccountController($location, $http, $window) {
         var model = { email: account.Email, password: account.Password}
         $http.post("https://localhost:44376/api/Account/Login", model)
             .then(function (response) {
-                console.log(response);
                 $window.localStorage.setItem('token', response.data);
-                $location.path("/");
                 vm.loading = false;
-                $window.location.reload();
+               $window.location.reload();
             }, function (response) {
-                console.log(response);
                 displayResponseMessage(response);
             });
+
+        $location.path("/");
+
     };
 
     function displayResponseMessage(response) {
+        if (response.status === 401 || response.status === 403) {
+            $location.path("/");
+        }
+
         if (response.data.errors) {
             vm.error = response.data.errors.Name.join();
         }

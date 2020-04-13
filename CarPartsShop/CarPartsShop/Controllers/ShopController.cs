@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using CarPartsShop.Models;
 using Domain;
 using Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarPartsShop.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ShopController : ControllerBase
     {
         private readonly ICategoryWriteRepository _categoryWriteRepository;
@@ -111,7 +113,7 @@ namespace CarPartsShop.Controllers
                 }
 
                 var item = Item.GetItem(model.ParentCategoryId, model.Name, model.Description,
-                    model.Price, model.ImageData);
+                    model.Price, model.ImageData, model.OemNumber, model.PartNumber);
 
                 category.AddChildItem(item);
 
@@ -150,7 +152,7 @@ namespace CarPartsShop.Controllers
                     return BadRequest("Item does not exist");
                 }
 
-                item.UpdateItem(model.Name, model.Description, model.Price);
+                item.UpdateItem(model.Name, model.Description, model.Price, model.PartNumber, model.OemNumber);
 
 
                 var categoryModel = _categoryWriteRepository.UpdateCategory(category);

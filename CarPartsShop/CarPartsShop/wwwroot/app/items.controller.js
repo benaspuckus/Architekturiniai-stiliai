@@ -1,7 +1,7 @@
 ﻿angular.module('app')
     .controller('ItemsController', ItemsController);
 
-function ItemsController($scope, $http, $routeParams, $location) {
+function ItemsController($scope, $http, $routeParams, $location, $window) {
     var vm = this;
     vm.currentCategoryId = $routeParams.id;
     vm.isAddItemPressed = false;
@@ -12,11 +12,13 @@ function ItemsController($scope, $http, $routeParams, $location) {
     vm.removeItem = removeItem;
     vm.expandAddItem = expandAddItem;
     vm.goToItemInfo = goToItemInfo;
+    vm.token = $window.localStorage.getItem('token');
+    vm.config = { "headers": { "Authorization": "Bearer " + vm.token } }
 
     function getItems() {
         vm.error = null;
         vm.loading = true;
-        $http.get("https://localhost:44376/api/GetItems/" + vm.currentCategoryId)
+        $http.get("https://localhost:44376/api/GetItems/" + vm.currentCategoryId, vm.config)
             .then(function (response) {
                 vm.items = response.data;
                 vm.loading = false;
@@ -35,10 +37,12 @@ function ItemsController($scope, $http, $routeParams, $location) {
                     parentCategoryId: vm.currentCategoryId,
                     description: item.Description,
                     price: item.Price,
+                    oemNumber: item.OemNumber,
+                    partNumber: item.PartNumber,
                     imageData: data
                 };
 
-                $http.post("https://localhost:44376/api/AddCategoryItem", model)
+                $http.post("https://localhost:44376/api/AddCategoryItem", model, vm.config)
                     .then(function (response) {
                         vm.loading = false;
                         vm.categories = getItems();
@@ -55,7 +59,7 @@ function ItemsController($scope, $http, $routeParams, $location) {
         vm.loading = true;
 
         var model = {categoryId : item.parentCategoryId, itemId: item.itemId}
-        $http.post("https://localhost:44376/api/RemoveCategoryItem", model)
+        $http.post("https://localhost:44376/api/RemoveCategoryItem", model, vm.config)
             .then(function (response) {
                 vm.loading = false;
                 vm.categories = getItems();
@@ -86,6 +90,10 @@ function ItemsController($scope, $http, $routeParams, $location) {
 
 
     function displayResponseMessage(response) {
+        if (response.status === 401 || response.status === 403) {
+            $location.path("/");
+        }
+
         if (response.data.errors) {
             vm.error = response.data.errors.Name.join();
         }

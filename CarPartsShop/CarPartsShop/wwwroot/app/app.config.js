@@ -5,17 +5,27 @@ angular.module('app')
     $routeProvider
         .when('/',
             {
-                templateUrl: 'pages/viewCategories.html',
+                templateUrl: 'pages/browseItems.html',
+                controller: 'BrowseItemsController'
+            })
+        .when('/manageItems',
+            {
+                templateUrl: 'pages/editCategories.html',
                 controller: 'CategoriesController'
+            })
+        .when('/cart',
+            {
+                templateUrl: 'pages/shoppingCart.html',
+                controller: 'BrowseItemsController'
             })
         .when('/manageItems/:id',
             {
-                templateUrl: 'pages/manageItems.html',
+                templateUrl: 'pages/editCategoryItems.html',
                 controller: 'ItemsController'
             })
         .when('/manageItems/:id/:itemId',
             {
-                templateUrl: 'pages/viewItem.html',
+                templateUrl: 'pages/editItem.html',
                 controller: 'SingleItemController'
             })
         .when('/register',

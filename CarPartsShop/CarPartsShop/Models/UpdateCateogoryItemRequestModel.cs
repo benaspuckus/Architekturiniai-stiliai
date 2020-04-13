@@ -14,6 +14,9 @@ namespace CarPartsShop.Models
         [StringLength(256, ErrorMessage = "Description is too long")]
         public string Description { get; set; }
 
+        public string OemNumber { get; set; }
+        public string PartNumber { get; set; }
+
         public Guid ParentCategoryId { get; set; }
         public Guid ItemId { get; set; }
     }

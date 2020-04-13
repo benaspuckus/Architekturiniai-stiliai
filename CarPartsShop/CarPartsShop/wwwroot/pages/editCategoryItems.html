@@ -18,6 +18,10 @@
                 <input ng-model="item.Price" type="number" placeholder="Enter category price" name="price" required><br />
                 <label>Description:</label><br />
                 <input ng-model="item.Description" type="text" placeholder="Enter category description" name="description" required><br />
+                <label>OEM Number:</label><br />
+                <input ng-model="item.OemNumber" type="text" placeholder="Enter OEM number" name="oem" required><br />
+                <label>Part Number:</label><br />
+                <input ng-model="item.PartNumber" type="text" placeholder="Enter Part number" name="part" required><br />
                 <div>
                     <label for="myFileField">Select a file: </label>
                     <input type="file" demo-file-model="myFile" id="myFileField" />
@@ -27,13 +31,13 @@
         </div>
 
         <div class="item-view">
-            <div class="item-blocks"ng-repeat="item in controller.items">
+            <div class="item-blocks" ng-repeat="item in controller.items">
                 <span class="item-info">Item name:</span>
                 {{item.name}}<br>
                 <span class="item-info">Item price:</span>
                 {{item.price}} €<br>
                 <img class="item-image" ng-click="controller.goToItemInfo(item)" ng-src="{{item.imageData ? item.imageData : 'images/stockImage.png'}}" /><br>
-                <button ng-click="controller.removeItem(item)">Remove</button>
+                <button confirmed-click="controller.removeItem(item)" ng-confirm-click="Are you sure you want to delete {{item.name}}?"> Remove </button>
                 <br><br>
             </div>
         </div>

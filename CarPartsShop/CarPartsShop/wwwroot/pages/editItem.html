@@ -15,7 +15,11 @@
         <input ng-disabled="!controller.isModifyPressed" ng-model="newItem.Name" class="item-info" ng-value="fetchedItem.name" /><br>
         <label>Item price:</label>
         <input ng-disabled="!controller.isModifyPressed" type="number" ng-model="newItem.Price" class="item-info" ng-value=" fetchedItem.price" /><br><br />
-        <label>Item description:</label><br/>
+        <label>OEM number:</label>
+        <input ng-disabled="!controller.isModifyPressed" ng-model="newItem.Oem" class="item-info" ng-value="fetchedItem.oemNumber" /><br>
+        <label>Part Number:</label>
+        <input ng-disabled="!controller.isModifyPressed" ng-model="newItem.Part" class="item-info" ng-value="fetchedItem.partNumber" /><br>
+        <label>Item description:</label><br />
         <textarea ng-disabled="!controller.isModifyPressed" ng-model="newItem.Description" class="item-info" ng-value="fetchedItem.description"></textarea>
         <br>
         <button ng-if="controller.isModifyPressed" ng-click="controller.saveItem(newItem)">Save item</button>
