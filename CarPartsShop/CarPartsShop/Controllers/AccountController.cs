@@ -85,7 +85,7 @@ namespace CarPartsShop.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet("api/Account/CheckStatus")]
         public IActionResult CheckStatus()
         {
@@ -100,23 +100,26 @@ namespace CarPartsShop.Controllers
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtToken:SecretKey"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
             };
 
             var userRoles = await _userManager.GetRolesAsync(user);
 
             claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+            var tokenHandler = new JwtSecurityTokenHandler();
 
             var token = new JwtSecurityToken(_configuration["JwtToken:Issuer"],
                 _configuration["JwtToken:Issuer"],
                 expires: DateTime.Now.AddMinutes(30),
                 claims: claims,
                 signingCredentials: credentials);
+            
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return tokenHandler.WriteToken(token);
+
+           
 
         }
     }

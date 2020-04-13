@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
@@ -53,9 +54,11 @@ namespace CarPartsShop.Controllers
         }
 
         [HttpGet("api/GetItems/{categoryId}/{itemId}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetSingleItem(Guid categoryId, Guid itemId)
         {
+            var current = User;
+            var role = current.FindFirst(ClaimTypes.Role).Value;
+
             try
             {
                 var category = await _categoryReadRepository.GetCategoryWithItems(categoryId);
