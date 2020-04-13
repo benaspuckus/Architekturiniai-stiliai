@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
+using CarPartsShop.Extensions;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CarPartsShop
 {
@@ -22,10 +29,40 @@ namespace CarPartsShop
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = 4;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireLowercase = false;
+                })
+
+                .AddEntityFrameworkStores<ShopContext>()
+                .AddRoles<IdentityRole>();
+
+
+            services.AddAuthentication(x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["JwtToken:Issuer"],
+                    ValidAudience = Configuration["JwtToken:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtToken:SecretKey"]))
+                };
+            });
             //Contexts
             services.AddDbContext<ShopContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ShopContextConnectionString")));
-
             services.AddScoped<ICategoryReadRepository, CategoryReadRepository>();
             services.AddScoped<ICategoryWriteRepository, CategoryWriteRepository>();
             services.AddScoped<ShopContext>();
@@ -33,7 +70,7 @@ namespace CarPartsShop
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             /*app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -43,10 +80,12 @@ namespace CarPartsShop
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseMvc();
         }
+
+       
     }
 }

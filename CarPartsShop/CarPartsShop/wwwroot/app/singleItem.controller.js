@@ -16,7 +16,6 @@ function SingleItemController($http, $routeParams, $scope) {
         vm.loading = true;
         $http.get("https://localhost:44376/api/GetItems/" + vm.currentCategoryId + "/" + vm.currentItemId)
             .then(function (response) {
-                console.log(response);
                 vm.testItem = response.data;
                 $scope.fetchedItem = response.data;
                 vm.item = response.data;

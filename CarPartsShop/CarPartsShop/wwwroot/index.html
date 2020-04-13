@@ -11,17 +11,27 @@
     <script src="app/items.controller.js"></script>
     <script src="app/singleItem.controller.js"></script>
     <script src="app/categories.controller.js"></script>
+    <script src="app/account.controller.js"></script>
     <script src="app/app.directive.js"></script>
     <link href="css/styles.css" rel="stylesheet" />
 </head>
 <body ng-app="app">
-    <div ng-controller="MainController as controller">
+    <div ng-controller="MainController as controller" ng-init="controller.checkLoginStatus()">
 
         <div class="flex-container">
             <div class="sidewall"></div>
 
             <div class="main-content">
                 <h1>Car parts online shop</h1>
+                <div ng-if="controller.loggedUserName">
+                    <span>{{controller.loggedUserName}}</span>
+                    <button ng-click="controller.logOut()">Log out</button>
+                </div>
+                <div ng-if="!controller.loggedUserName">
+                    <a href="#!register">Register</a>
+                    <a href="#!login">Login</a>
+                </div>
+                
                 <div ng-view></div>
             </div>
 

@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body ng-app="app">
+    <div ng-controller="AccountController as controller">
+        <form name="createAccount">
+            <label>Email:</label><br />
+            <input ng-model="account.Email" type="email" placeholder="Enter account email" name="name" required><br />
+            <label>Password:</label><br />
+            <input ng-model="account.Password" type="password" placeholder="Enter password" name="password" required><br />
+            <label>ConfirmPassword:</label><br />
+            <input ng-model="account.Confirm" required compare-to="password" type="password" placeholder="Confirm password" name="confirm"><br />
+
+            <input type="submit" ng-click="controller.createAccount(account)" value="Create Account" /><br />
+            <div ng-if="controller.loading">Loading...</div>
+            <div ng-if="controller.error">{{ controller.error }}</div>
+        </form>
+    </div>
+</body>
+</html>

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using Domain;
 using Infrastructure.EntityTypeConfiguration;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
 {
-    public class ShopContext : DbContext
+    public class ShopContext : IdentityDbContext
     {
         public DbSet<Category> Categories { get; set; }
 

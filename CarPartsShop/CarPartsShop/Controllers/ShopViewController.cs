@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarPartsShop.Controllers
@@ -52,6 +53,7 @@ namespace CarPartsShop.Controllers
         }
 
         [HttpGet("api/GetItems/{categoryId}/{itemId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetSingleItem(Guid categoryId, Guid itemId)
         {
             try

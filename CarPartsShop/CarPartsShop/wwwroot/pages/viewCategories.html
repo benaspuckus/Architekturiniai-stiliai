@@ -8,7 +8,7 @@
 
 </head>
 <body ng-app="app">
-    <div ng-controller="CategoriesController as controller">
+    <div ng-controller="CategoriesController as controller" ng-init="controller.getCategories()">
 
         <script type="text/ng-template" id="treeRenderer.html">
             <div class="category-item" ng-click="controller.expandCategory(category.categoryId)">{{category.name}}</div>
@@ -26,7 +26,6 @@
                 <li ng-repeat="category in category.childCategories" ng-include="'treeRenderer.html'"></li>
             </ul>
         </script>
-        <button ng-click="controller.getCategories()" class="button">Get Categories</button>
         <br />
         <button ng-click="controller.pressCreateInitialCategory()" class="button">Add initial category</button>
         <div ng-show="controller.isCreateInitialCategoryPressed">

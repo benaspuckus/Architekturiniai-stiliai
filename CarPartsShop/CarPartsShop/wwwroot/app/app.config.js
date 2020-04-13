@@ -18,5 +18,15 @@ angular.module('app')
                 templateUrl: 'pages/viewItem.html',
                 controller: 'SingleItemController'
             })
+        .when('/register',
+            {
+                templateUrl: 'pages/register.html',
+                controller: 'AccountController'
+            })
+        .when('/login',
+            {
+                templateUrl: 'pages/login.html',
+                controller: 'AccountController'
+            })
         .otherwise('/');
 });
