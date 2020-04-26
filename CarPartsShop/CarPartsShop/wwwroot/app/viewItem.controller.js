@@ -1,43 +1,35 @@
 ﻿angular.module('app')
-    .controller('AccountController', AccountController);
+    .controller('ViewItemController', ViewItemController);
 
-
-function AccountController($location, $http, $window, $rootScope) {
+function ViewItemController($routeParams, $window, $http, $location) {
     var vm = this;
-    vm.createAccount = createAccount;
-    vm.login = login;
+    vm.searchCategoryId = $routeParams.searchCategoryId;
+    vm.categoryId = $routeParams.categoryId;
+    vm.currentItemId = $routeParams.itemId;
+    vm.getItemInfo = getItemInfo;
+    vm.goBack = goBack;
+    vm.token = $window.localStorage.getItem('token');
+    vm.config = { "headers": { "Authorization": "Bearer " + vm.token } }
 
-
-    function createAccount(account) {
+    function getItemInfo() {
         vm.error = null;
         vm.loading = true;
-        var model = { email: account.Email, password: account.Password, confirmPassword: account.Confirm }
-        $http.post("https://localhost:44376/api/Account/Register", model)
+        $http.get("https://localhost:44376/api/GetItems/" + vm.categoryId + "/" + vm.currentItemId, vm.config)
             .then(function (response) {
-                $window.localStorage.setItem('token', response.data);
+                vm.item = response.data;
                 vm.loading = false;
-                $rootScope.shouldReload = true;
-                $window.location.href = "/";
-
             }, function (response) {
-                console.log(response);
                 displayResponseMessage(response);
             });
     };
 
-    function login(account) {
-        vm.error = null;
-        vm.loading = true;
-        var model = { email: account.Email, password: account.Password }
-        $http.post("https://localhost:44376/api/Account/Login", model)
-            .then(function (response) {
-                $window.localStorage.setItem('token', response.data);
-                vm.loading = false;
-                $window.location.href = "/";
-            }, function (response) {
-                displayResponseMessage(response);
-            });
+    function goBack() {
+        var id = vm.searchCategoryId;
+        if (vm.searchCategoryId === 'undefined') {
+            id = "";
+        }
 
+        $location.path("/" + id);
     };
 
     function displayResponseMessage(response) {
@@ -68,5 +60,4 @@ function AccountController($location, $http, $window, $rootScope) {
         }
         vm.loading = false;
     };
-
-} 
+}

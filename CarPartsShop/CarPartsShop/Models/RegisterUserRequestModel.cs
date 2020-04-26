@@ -18,7 +18,7 @@ namespace CarPartsShop.Models
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Do not match")]
+        [Compare("Password", ErrorMessage = "Passwords do not match!")]
         public string ConfirmPassword { get; set; }
     }
 }

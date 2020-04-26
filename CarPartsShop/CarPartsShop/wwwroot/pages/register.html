@@ -6,19 +6,41 @@
     <title></title>
 </head>
 <body ng-app="app">
-    <div ng-controller="AccountController as controller">
-        <form name="createAccount" class="center-form">
-            <label>Email:</label><br />
-            <input ng-model="account.Email" type="email" placeholder="Enter account email" name="name" required><br />
-            <label>Password:</label><br />
-            <input ng-model="account.Password" type="password" placeholder="Enter password" name="password" required><br />
-            <label>ConfirmPassword:</label><br />
-            <input ng-model="account.Confirm" required compare-to="password" type="password" placeholder="Confirm password" name="confirm"><br />
-
-            <input type="submit" ng-click="controller.createAccount(account)" value="Create Account" /><br />
-            <div ng-if="controller.loading">Loading...</div>
-            <div ng-if="controller.error">{{ controller.error }}</div>
-        </form>
+    <div ng-controller="AccountController as controller" layout="column" layout-align="center center">
+        <h2>REGISTER</h2>
+        <md-content layout-padding="">
+            <div>
+                <form name="register">
+                    <md-input-container class="md-block">
+                        <label>Email</label>
+                        <input ng-model="account.Email" type="email" name="name" required="" md-no-asterisk="">
+                        <div ng-messages="register.name.$error">
+                            <div ng-message="required">Email is required.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Password</label>
+                        <input ng-model="account.Password" type="password" name="password" required="" md-no-asterisk="">
+                        <div ng-messages="register.password.$error">
+                            <div ng-message="required">Password is required.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Confirm Password</label>
+                        <input ng-model="account.Confirm" compare-to="password" type="password" name="confirm" required="" md-no-asterisk="">
+                        <div ng-messages="register.confirm.$error">
+                            <div ng-message="required">Please confirm password.</div>
+                            <div ng-message="compare-to">Passwords must match</div>
+                        </div>
+                    </md-input-container>
+                    <div layout="column" layout-align="center center">
+                        <md-button type="submit" class="md-raised" ng-click="register.$valid && controller.createAccount(account)">Create Account</md-button>
+                    </div>
+                </form>
+            </div>
+        </md-content>
+        <div ng-if="controller.loading">Loading...</div><br />
+        <div class="error-message" ng-if="controller.error">{{ controller.error }}</div>
     </div>
 </body>
 </html>

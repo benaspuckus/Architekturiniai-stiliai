@@ -14,6 +14,8 @@ namespace Infrastructure
         Task<Category> GetCategoryWithChildren(Guid categoryId);
         Task<bool> DoesCategoryExist(string categoryName);
         Task<Category> GetCategoryWithItems(Guid categoryId);
+        Task<List<Category>> GetCategoriesForSearch();
+        Task<Category> GetCategoriesWithItems(Guid categoryId);
     }
     public class CategoryReadRepository : ICategoryReadRepository
     {
@@ -45,10 +47,43 @@ namespace Infrastructure
             return category;
         }
 
+        public async Task<List<Category>> GetCategoriesForSearch()
+        {
+            var category = await _context
+                .Categories
+                .Include(x => x.ChildCategories)
+                .ThenInclude(x => x.ChildCategories)
+                .ThenInclude(x => x.ChildCategories)
+                .Where(x => !x.ParentCategoryId.HasValue)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return category;
+        }
+
         public async Task<Category> GetCategoryWithItems(Guid categoryId)
         {
             var category = await _context
                 .Categories
+                .Include(x => x.ChildItems)
+                .FirstOrDefaultAsync(x => x.CategoryId == categoryId);
+
+            return category;
+        }
+
+        public async Task<Category> GetCategoriesWithItems(Guid categoryId)
+        {
+            var category = await _context
+                .Categories
+                .Include(x => x.ChildCategories)
+                .ThenInclude(x => x.ChildCategories)
+                .ThenInclude(x => x.ChildCategories)
+                .ThenInclude(x => x.ChildItems)
+                .Include(x => x.ChildCategories)
+                .ThenInclude(x => x.ChildCategories)
+                .ThenInclude(x => x.ChildItems)
+                .Include(x => x.ChildCategories)
+                .ThenInclude(x => x.ChildItems)
                 .Include(x => x.ChildItems)
                 .FirstOrDefaultAsync(x => x.CategoryId == categoryId);
 
@@ -83,13 +118,6 @@ namespace Infrastructure
                 .Where(x => !x.ParentCategoryId.HasValue)
                 .AsNoTracking()
                 .ToListAsync();
-
-            /*var returnResult = new List<Category>();
-
-            foreach (var category in categories)
-            {
-                if(categ)
-            }*/
 
             return categories;
         }

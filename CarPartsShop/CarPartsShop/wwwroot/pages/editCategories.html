@@ -11,16 +11,16 @@
     <div ng-controller="CategoriesController as controller" ng-init="controller.getCategories()">
 
         <script type="text/ng-template" id="treeRenderer.html">
-            <div class="category-item" ng-click="controller.expandCategory(category.categoryId)">{{category.name}}</div>
+            <div class="category-item" ng-click="controller.expandCategory(category.categoryId)">{{category.name}}({{category.childItems.length}})</div>
             <div ng-show="category.isExpanded">
                 <form name="createCategory">
                     <input type="text" ng-model="newCategoryName" placeholder="Enter category name" name="categoryName" required>
-                    <input type="submit" ng-click="controller.addCategory(newCategoryName, category)" value="Add category">
+                    <md-button class="md-raised md-primary" type="submit" ng-click="controller.addCategory(newCategoryName, category)" >Add category</md-button>
                 </form>
             </div>
             <div ng-show="category.isExpanded">
-                <button ng-if="category.childCategories.length === 0 && category.childItems.length === 0" confirmed-click="controller.removeCategory(category.categoryId)" ng-confirm-click="Are you sure you want to delete {{category.name}}?">Delete category</button>
-                <button ng-if="category.childCategories.length === 0" ng-click="controller.goToManageItems(category.categoryId)">Manage items</button>
+                <md-button class="md-primary" ng-disabled="!(category.childCategories.length === 0 && category.childItems.length === 0)" confirmed-click="controller.removeCategory(category.categoryId)" ng-confirm-click="Are you sure you want to delete {{category.name}}?">Delete category</md-button>
+                <md-button class="md-primary" ng-click="controller.goToManageItems(category.categoryId)">Manage items</md-button>
             </div>
             <ul ng-if="category.childCategories">
                 <li ng-repeat="category in category.childCategories" ng-include="'treeRenderer.html'"></li>

@@ -5,6 +5,10 @@
     <title>ASP.NET Core</title>
     <script src="js/angular.js"></script>
     <script src="js/angular-route.js"></script>
+    <script src="js/angular-animate.min.js"></script>
+    <script src="js/angular-aria.min.js"></script>
+    <script src="js/angular-material.min.js"></script>
+    <script src="js/angular-messages.min.js"></script>
     <script src="app/app.module.js"></script>
     <script src="app/app.config.js"></script>
     <script src="app/main.controller.js"></script>
@@ -14,25 +18,35 @@
     <script src="app/account.controller.js"></script>
     <script src="app/app.directive.js"></script>
     <script src="app/browseItems.controller.js"></script>
+    <script src="app/viewItem.controller.js"></script>
     <link href="css/styles.css" rel="stylesheet" />
+    <link href="css/angular-material.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
 </head>
 <body ng-app="app">
-    <div ng-controller="MainController as controller" ng-init="controller.checkLoginStatus()">
+    <div ng-controller="MainController as controller" ng-init="controller.checkLoginStatus(); controller.checkAdminStatus()">
 
         <div class="flex-container">
             <div class="sidewall"></div>
 
             <div class="main-content">
-                <h1>Car parts online shop</h1>
-                <div class="account-info" ng-if="controller.loggedUserName">
-                    <span>{{controller.loggedUserName}}</span>
-                    <button ng-click="controller.logOut()">Log out</button>
+                <div layout="row" layout-align="start center" class="nav">
+                    <span class="shop-name">Car parts Shop</span>
+                    <md-button><a href="#!" style="color: white">Home</a></md-button>
+                    <md-button><a href="#!aboutUs" style="color: white">About Us</a></md-button>
+                    <input class="menu-input" placeholder="Search items" />
+                    <div ng-if="!controller.loggedUserName" layout="row" layout-align="center center">
+                        <a href="#!login"><img class="login-icon" ng-src="images/login.png" /></a>
+                    </div>
+                    <div class="account-info" ng-if="controller.loggedUserName">
+                        <span>{{controller.loggedUserName}}</span>
+                        <img class="login-icon" confirmed-click="controller.logOut()" ng-confirm-click="Are you sure you want to log out?" ng-src="images/logout.png" />
+                        <md-button ng-click="controller.openShoppingCart()">
+                            <md-icon>shopping_cart</md-icon>
+                        </md-button>
+                    </div>
                 </div>
-                <div class="account-info" ng-if="!controller.loggedUserName">
-                    <a href="#!register">Register</a><br/>
-                    <a href="#!login">Login</a>
-                </div>
-                
                 <div ng-view></div>
             </div>
 

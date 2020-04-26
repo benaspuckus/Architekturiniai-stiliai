@@ -9,24 +9,58 @@
 </head>
 <body ng-app="app">
     <div ng-controller="SingleItemController as controller" ng-init="controller.getItemInfo()">
+        <md-content layout-padding="" layout="column" layout-align="center center">
+            <img style="width:300px;height:300px" ng-src="{{fetchedItem.imageData ? fetchedItem.imageData : 'images/stockImage.png'}}" /><br>
+            <form name="createItem">
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs="">
+                        <label>Item name</label>
+                        <input ng-disabled="!controller.isModifyPressed" ng-model="newItem.Name" ng-value="fetchedItem.name" required="" md-no-asterisk="">
+                        <div ng-messages="createItem.name.$error">
+                            <div ng-message="required">Name is required.</div>
+                        </div>
+                    </md-input-container>
 
-        <img style="width:300px;height:300px" ng-src="{{fetchedItem.imageData ? fetchedItem.imageData : 'images/stockImage.png'}}" /><br>
-        <label>Item name:</label>
-        <input ng-disabled="!controller.isModifyPressed" ng-model="newItem.Name" class="item-info" ng-value="fetchedItem.name" /><br>
-        <label>Item price:</label>
-        <input ng-disabled="!controller.isModifyPressed" type="number" ng-model="newItem.Price" class="item-info" ng-value=" fetchedItem.price" /><br><br />
-        <label>OEM number:</label>
-        <input ng-disabled="!controller.isModifyPressed" ng-model="newItem.Oem" class="item-info" ng-value="fetchedItem.oemNumber" /><br>
-        <label>Part Number:</label>
-        <input ng-disabled="!controller.isModifyPressed" ng-model="newItem.Part" class="item-info" ng-value="fetchedItem.partNumber" /><br>
-        <label>Item description:</label><br />
-        <textarea ng-disabled="!controller.isModifyPressed" ng-model="newItem.Description" class="item-info" ng-value="fetchedItem.description"></textarea>
-        <br>
-        <button ng-if="controller.isModifyPressed" ng-click="controller.saveItem(newItem)">Save item</button>
-        <button ng-if="!controller.isModifyPressed" ng-click="controller.pressModify()">Modify</button><br /><br />
-        <a ng-href="#!/manageItems/{{controller.currentCategoryId}}"><button class="button">Go back</button></a>
+                    <md-input-container class="md-block">
+                        <label>Item price</label>
+                        <input ng-disabled="!controller.isModifyPressed" type="number" ng-model="newItem.Price" ng-value=" fetchedItem.price" required="" md-no-asterisk="">
+                        <div ng-messages="createItem.price.$error">
+                            <div ng-message="required">Price is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs="">
+                        <label>OEM Number</label>
+                        <input ng-disabled="!controller.isModifyPressed" ng-model="newItem.Oem" ng-value="fetchedItem.oemNumber" required="" md-no-asterisk="">
+                        <div ng-messages="createItem.oem.$error">
+                            <div ng-message="required">OEM number is required.</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-block">
+                        <label>Part number</label>
+                        <input ng-disabled="!controller.isModifyPressed" ng-model="newItem.Part" ng-value="fetchedItem.partNumber" required="" md-no-asterisk="">
+                        <div ng-messages="createItem.part.$error">
+                            <div ng-message="required">Part number is required.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <md-input-container class="md-block">
+                    <label>Description</label>
+                    <textarea ng-disabled="!controller.isModifyPressed" ng-model="newItem.Description" ng-value="fetchedItem.description" md-no-asterisk=""></textarea>
+                </md-input-container>
+            </form>
+            <md-button ng-if="controller.isModifyPressed" ng-click="controller.saveItem(newItem)">Save item</md-button>
+            <md-button ng-if="!controller.isModifyPressed" ng-click="controller.pressModify()">Modify</md-button><br /><br />
+        </md-content>
+
+        <a ng-href="#!/manageItems/{{controller.currentCategoryId}}"><md-button class="md-raised">Go back</md-button></a>
         <div ng-if="controller.loading">Loading...</div>
-        <div ng-if="controller.error">{{ controller.error }}</div>
+        <div class="error-message" ng-if="controller.error">{{ controller.error }}</div>
     </div>
 </body>
 </html>

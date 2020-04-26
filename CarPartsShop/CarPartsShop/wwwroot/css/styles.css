@@ -4,12 +4,12 @@
     width: 70px;
 }
 
-.category-item:hover {
-    color: blue;
-    cursor: pointer;
-    text-decoration: underline;
-    width: 100px;
-}
+    .category-item:hover {
+        color: blue;
+        cursor: pointer;
+        text-decoration: underline;
+        width: 100px;
+    }
 
 .flex-container {
     display: flex;
@@ -42,8 +42,17 @@ textarea {
 
 .main-content {
     flex-grow: 6;
-    background: antiquewhite;
-    padding: 10px;
+}
+
+.nav {
+    background-color: #2d2d2d;
+    color: white;
+}
+
+.test {
+    background: #2d2d2d;
+    background-color: #2d2d2d;
+    color: #2d2d2d;
 }
 
 .item-blocks {
@@ -99,7 +108,65 @@ label {
     border-radius: 12px;
 }
 
-.button:hover {
-    background-color: #555555;
-    color: white;
+    .button:hover {
+        background-color: #555555;
+        color: white;
+    }
+
+.menu-input {
+}
+
+.shop-name {
+    font-size: 30px;
+    flex: auto;
+    margin: 5px;
+}
+
+.login-icon {
+    width: 30px;
+    height: 50%;
+}
+
+.login-icon:hover {
+    cursor: pointer;
+}
+
+.error-message {
+    color: crimson;
+}
+
+.grid-item {
+    border-style: solid;
+}
+
+
+table, th, td {
+    border: 1px solid grey;
+    border-collapse: collapse;
+    padding: 5px;
+}
+td {
+    word-break: break-all;
+
+}
+
+table tr:nth-child(odd) {
+    background-color: #f1f1f1;
+}
+
+table tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+table thead th:nth-child(0),
+table thead th:nth-child(1) {
+    width: 25%;
+}
+
+table thead th:nth-child(2) {
+    width: 20%;
+}
+
+table thead th:nth-child(3) {
+    width: 30%;
 }

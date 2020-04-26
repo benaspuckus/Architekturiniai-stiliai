@@ -9,42 +9,82 @@
 </head>
 <body ng-app="app">
     <div ng-controller="ItemsController as controller" ng-init="controller.getItems()">
-        <button class="button" ng-click="controller.expandAddItem()">Add item</button><br />
+        <md-button ng-click="controller.expandAddItem()">Add item</md-button>
         <div ng-show="controller.isAddItemPressed">
-            <form name="createItem">
-                <label>Name:</label><br />
-                <input ng-model="item.Name" type="text" placeholder="Enter category name" name="name" required><br />
-                <label>Price:</label><br />
-                <input ng-model="item.Price" type="number" placeholder="Enter category price" name="price" required><br />
-                <label>Description:</label><br />
-                <input ng-model="item.Description" type="text" placeholder="Enter category description" name="description" required><br />
-                <label>OEM Number:</label><br />
-                <input ng-model="item.OemNumber" type="text" placeholder="Enter OEM number" name="oem" required><br />
-                <label>Part Number:</label><br />
-                <input ng-model="item.PartNumber" type="text" placeholder="Enter Part number" name="part" required><br />
-                <div>
-                    <label for="myFileField">Select a file: </label>
-                    <input type="file" demo-file-model="myFile" id="myFileField" />
+            <md-content layout-padding="" layout="column" layout-align="center center">
+                <form name="createItem">
+                    <div layout-gt-xs="row">
+                        <md-input-container class="md-block" flex-gt-xs="">
+                            <label>Name</label>
+                            <input ng-model="item.Name" type="text" name="name" required="" md-no-asterisk="">
+                            <div ng-messages="createItem.name.$error">
+                                <div ng-message="required">Name is required.</div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container class="md-block">
+                            <label>Price</label>
+                            <input ng-model="item.Price" type="number" name="password" required="" md-no-asterisk="">
+                            <div ng-messages="createItem.price.$error">
+                                <div ng-message="required">Price is required.</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+
+                    <md-input-container class="md-block">
+                        <label>Description</label>
+                        <input ng-model="item.Description" type="text" name="description" md-no-asterisk="">
+                    </md-input-container>
+
+                    <div layout-gt-xs="row">
+                        <md-input-container class="md-block" flex-gt-xs="">
+                            <label>OEM Number</label>
+                            <input ng-model="item.OemNumber" type="text" name="oem" required="" md-no-asterisk="">
+                            <div ng-messages="createItem.oem.$error">
+                                <div ng-message="required">OEM number is required.</div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container class="md-block">
+                            <label>Part number</label>
+                            <input ng-model="item.PartNumber" type="text" name="oem" required="" md-no-asterisk="">
+                            <div ng-messages="createItem.part.$error">
+                                <div ng-message="required">Part number is required.</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <input type="file" demo-file-model="myFile" id="myFileField" />
+                    </div>
+                    <br /><br />
+                    <md-button class="md-raised" type="submit" ng-click="controller.addItem(item)">Create item</md-button><br />
+                </form>
+            </md-content>
+        </div>
+        <md-grid-list md-cols="2" md-cols-sm="1" md-cols-xs="1" md-row-height="5:4" md-gutter="20px">
+            <md-grid-tile ng-repeat="item in controller.items | startFrom:controller.currentPage*controller.pageSize | limitTo:controller.pageSize" class="grid-item">
+                <div layout-padding="" layout="column" layout-align="center center">
+                    <span class="item-info">{{item.name}}</span>
+                    <img class="item-image" ng-click="controller.goToItemInfo(item)" ng-src="{{item.imageData ? item.imageData : 'images/stockImage.png'}}" />
+                    <span style="color: red">{{item.price}} €</span>
+
+                    <md-button confirmed-click="controller.removeItem(item)" ng-confirm-click="Are you sure you want to delete {{item.name}}?"> Remove </md-button>
                 </div>
-                <input type="submit" ng-click="controller.addItem(item)" value="Create item" /><br />
-            </form>
-        </div>
+            </md-grid-tile>
+        </md-grid-list>
 
-        <div class="item-view">
-            <div class="item-blocks" ng-repeat="item in controller.items">
-                <span class="item-info">Item name:</span>
-                {{item.name}}<br>
-                <span class="item-info">Item price:</span>
-                {{item.price}} €<br>
-                <img class="item-image" ng-click="controller.goToItemInfo(item)" ng-src="{{item.imageData ? item.imageData : 'images/stockImage.png'}}" /><br>
-                <button confirmed-click="controller.removeItem(item)" ng-confirm-click="Are you sure you want to delete {{item.name}}?"> Remove </button>
-                <br><br>
-            </div>
-        </div>
-        <a href="#"><button class="button">Go back</button></a>
+        <md-button ng-disabled="controller.currentPage == 0" ng-click="controller.currentPage=controller.currentPage-1">
+            Previous
+        </md-button>
+        {{controller.currentPage+1}}/{{controller.numberOfPages()}}
+        <md-button ng-disabled="controller.currentPage >= controller.items.length/controller.pageSize - 1" ng-click="controller.currentPage=controller.currentPage+1">
+            Next
+        </md-button><br/>
+
+        <a href="#"><md-button class="md-raised">Go back</md-button></a>
         <div ng-if="controller.loading">Loading...</div>
-    <div ng-if="controller.error">{{ controller.error }}</div>
+        <div class="error-message" ng-if="controller.error">{{ controller.error }}</div>
 
-</div>
+    </div>
 </body>
 </html>

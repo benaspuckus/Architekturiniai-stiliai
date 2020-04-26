@@ -8,6 +8,16 @@ angular.module('app')
                 templateUrl: 'pages/browseItems.html',
                 controller: 'BrowseItemsController'
             })
+        .when('/:categoryId',
+            {
+                templateUrl: 'pages/browseItems.html',
+                controller: 'BrowseItemsController'
+            })
+        .when('/:searchCategoryId/:categoryId/:itemId',
+            {
+                templateUrl: 'pages/viewItem.html',
+                controller: 'ViewItemController'
+            })
         .when('/manageItems',
             {
                 templateUrl: 'pages/editCategories.html',
@@ -37,6 +47,11 @@ angular.module('app')
             {
                 templateUrl: 'pages/login.html',
                 controller: 'AccountController'
+            })
+        .when('/aboutUs',
+            {
+                templateUrl: 'pages/aboutUs.html',
+                controller: 'BrowseItemsController'
             })
         .otherwise('/');
 });

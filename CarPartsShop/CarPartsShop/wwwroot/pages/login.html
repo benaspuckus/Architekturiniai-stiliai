@@ -6,17 +6,36 @@
     <title></title>
 </head>
 <body ng-app="app">
-<div ng-controller="AccountController as controller">
-    <form class="center-form" name="login">
-        <label>Email:</label><br />
-        <input ng-model="login.Email" type="email" placeholder="Enter account email" name="name" required><br />
-        <label>Password:</label><br />
-        <input ng-model="login.Password" type="password" placeholder="Enter password" name="password" required><br />
+<div ng-controller="AccountController as controller" layout="column"  layout-align="center center">
+    <h2>LOG IN</h2>
+    <md-content layout-padding="">
+        <div >
+            <form name="login">
+                <md-input-container class="md-block">
+                    <label>Email</label>
+                    <input ng-model="login.Email" type="email" name="name" required="" md-no-asterisk="">
+                    <div ng-messages="login.name.$error">
+                        <div ng-message="required">Email is required.</div>
+                    </div>
+                </md-input-container>
 
-        <input type="submit" ng-click="controller.login(login)" value="Log in" /><br />
-        <div ng-if="controller.loading">Loading...</div>
-        <div ng-if="controller.error">{{ controller.error }}</div>
-    </form>
+                <md-input-container class="md-block">
+                    <label>Password</label>
+                    <input ng-model="login.Password" type="password" name="password" required="" md-no-asterisk="">
+                    <div ng-messages="login.name.$error">
+                        <div ng-message="required">Password is required.</div>
+                    </div>
+                </md-input-container>
+                <div layout="column" layout-align="center center">
+                    <md-button type="submit"class="md-raised" ng-click="login.$valid && controller.login(login)">Log in</md-button>
+                </div> <br />
+            </form>
+        </div>
+    </md-content>
+    
+    <span>Don't have an account? Register <a href="#!register">here</a></span>
+    <div ng-if="controller.loading">Loading...</div><br/>
+    <div class="error-message" ng-if="controller.error">{{ controller.error }}</div>
 </div>
 </body>
 </html>
