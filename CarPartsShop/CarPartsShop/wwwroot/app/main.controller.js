@@ -7,6 +7,8 @@ function MainController($window, $http, $location, $rootScope, $route) {
     vm.checkLoginStatus = checkLoginStatus;
     vm.logOut = logOut;
     vm.checkAdminStatus = checkAdminStatus;
+    vm.goToShoppingCart = goToShoppingCart;
+    vm.getCartSize = getCartSize;
     vm.token = $window.localStorage.getItem('token');
     vm.config = { "headers": { "Authorization": "Bearer " + vm.token } }
 
@@ -25,7 +27,15 @@ function MainController($window, $http, $location, $rootScope, $route) {
             });
     };
 
+    function getCartSize() {
+        var numberAsString = $window.localStorage.getItem('cart');
+        var number = JSON.parse(numberAsString);
+            return number.length;
+    }
 
+    function goToShoppingCart() {
+        $location.path("/cart");
+    }
 
     function checkAdminStatus() {
         vm.error = null;
@@ -44,8 +54,10 @@ function MainController($window, $http, $location, $rootScope, $route) {
         vm.error = null;
         vm.loading = true;
         $window.localStorage.removeItem('token');
+        $window.localStorage.removeItem('cart');
         checkLoginStatus();
         $rootScope.isUserLoggedIn = false;
+        $rootScope.adminStatus = false;
         vm.loading = false;
         $window.location.href = "/";
     };

@@ -127,9 +127,10 @@ label {
     height: 50%;
 }
 
-.login-icon:hover {
-    cursor: pointer;
-}
+    .login-icon:hover {
+        cursor: pointer;
+    }
+
 
 .error-message {
     color: crimson;
@@ -145,9 +146,9 @@ table, th, td {
     border-collapse: collapse;
     padding: 5px;
 }
+
 td {
     word-break: break-all;
-
 }
 
 table tr:nth-child(odd) {

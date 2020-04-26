@@ -10,14 +10,12 @@ function theming($mdThemingProvider) {
 function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog, $routeParams) {
     var vm = this;
     vm.currentItems = null;
-    vm.cart = [];
     vm.currentPage = 0;
     vm.pageSize = 4;
     vm.adminStatus = $rootScope.adminStatus;
     vm.currentCategoryId = $routeParams.categoryId;
     vm.goToEditCategories = goToEditCategories;
     vm.getShoppingCart = getShoppingCart;
-    vm.goToShoppingCart = goToShoppingCart;
     vm.getCurrentItems = getCurrentItems;
     vm.getAllItems = getAllItems;
     vm.isSimpleUserLoggedIn = isSimpleUserLoggedIn;
@@ -29,6 +27,9 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
     vm.confirmSearch = confirmSearch;
     vm.numberOfPages = numberOfPages;
     vm.goToItemInfo = goToItemInfo;
+    vm.deleteCartItem = deleteCartItem;
+    vm.getTotalSum = getTotalSum;
+    vm.cart = null;
     vm.token = $window.localStorage.getItem('token');
     vm.config = { "headers": { "Authorization": "Bearer " + vm.token } }
 
@@ -60,16 +61,43 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
                     id = search.subCategory.categoryId;
                 }
                 getCurrentItems(id);
-                $location.path("/" + id);
+                $location.path("/search/" + id);
             });
     };
 
     function addCartItem(item) {
-        vm.cart.push(item);
+
+        var localCart = JSON.parse($window.localStorage.getItem('cart'));
+
+        if (!localCart) {
+            localCart = [];
+        }
+        localCart.push(item);
+        $window.localStorage.setItem('cart', JSON.stringify(localCart));
+    }
+
+    function getTotalSum() {
+        var sum = 0;
+        var localCart = JSON.parse($window.localStorage.getItem('cart'));
+        if (localCart) {
+            for (var i = 0; i < localCart.length; i++) {
+                sum = localCart[i].price + sum;
+            }
+        }
+        return sum;
+    }
+
+    function deleteCartItem(index) {
+
+        var localCart = JSON.parse($window.localStorage.getItem('cart'));
+        localCart.splice(index,1);
+
+        $window.localStorage.setItem('cart', JSON.stringify(localCart));
+        $window.location.reload();
     }
 
     function goToItemInfo(item) {
-        $location.path("/" + vm.currentCategoryId + "/" + item.parentCategoryId + "/" + item.itemId);
+        $location.path("/items/" + vm.currentCategoryId + "/" + item.parentCategoryId + "/" + item.itemId);
     }
 
     function confirmSearch(search) {
@@ -88,19 +116,8 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
         return ($rootScope.isUserLoggedIn && !$rootScope.adminStatus);
     }
 
-    function goToShoppingCart() {
-        $location.path("/cart");
-    }
-
     function getShoppingCart() {
-        vm.error = null;
-        vm.loading = true;
-        $http.get("https://localhost:44376/api/Cart", vm.config)
-            .then(function (response) {
-                vm.loading = false;
-            }, function (response) {
-                displayResponseMessage(response);
-            });
+        vm.cart = JSON.parse($window.localStorage.getItem('cart'));
     };
 
     function getCurrentItems(id) {

@@ -11,6 +11,8 @@ function AccountController($location, $http, $window, $rootScope) {
     function createAccount(account) {
         vm.error = null;
         vm.loading = true;
+        $window.localStorage.removeItem('token');
+        $window.localStorage.removeItem('cart');
         var model = { email: account.Email, password: account.Password, confirmPassword: account.Confirm }
         $http.post("https://localhost:44376/api/Account/Register", model)
             .then(function (response) {
@@ -28,6 +30,8 @@ function AccountController($location, $http, $window, $rootScope) {
     function login(account) {
         vm.error = null;
         vm.loading = true;
+        $window.localStorage.removeItem('token');
+        $window.localStorage.removeItem('cart');
         var model = { email: account.Email, password: account.Password }
         $http.post("https://localhost:44376/api/Account/Login", model)
             .then(function (response) {

@@ -5,13 +5,12 @@
     <title></title>
 </head>
 <body ng-app="app">
-    <div ng-controller="BrowseItemsController as controller" ng-init="controller.checkAdminStatus(); controller.currentCategoryId ? controller.getCurrentItems(controller.currentCategoryId) : controller.getAllItems()" style="text-align: center">
+    <div ng-controller="BrowseItemsController as controller" ng-init="controller.currentCategoryId ? controller.getCurrentItems(controller.currentCategoryId) : controller.getAllItems()" style="text-align: center">
         <h1>WELCOME TO MAIN PAGE</h1>
-        <button class="button" ng-if="controller.isSimpleUserLoggedIn()" ng-click="controller.goToShoppingCart()">Shopping cart</button>
         <md-button class="md-primary md-raised test" ng-click="controller.showSearch($event)">
             Find by make
-        </md-button><br/><br />
-        <md-grid-list md-cols="2" md-cols-xs="1" md-row-height="5:4" md-gutter="20px">
+        </md-button><br /><br />
+        <md-grid-list md-cols="2" md-cols-xs="1" md-row-height="5:4" md-gutter="20px" ng-if="controller.currentItems.length > 0">
             <md-grid-tile ng-repeat="item in controller.currentItems | startFrom:controller.currentPage*controller.pageSize | limitTo:controller.pageSize" class="grid-item">
                 <div layout-padding="" layout="column" layout-align="center center">
                     <img class="item-image" ng-click="controller.goToItemInfo(item)" ng-src="{{item.imageData ? item.imageData : 'images/stockImage.png'}}" />
@@ -22,10 +21,24 @@
 
             </md-grid-tile>
         </md-grid-list>
-        
+        <br /><br />
+        <div ng-if="controller.currentItems.length > 0">
+            <md-button ng-disabled="controller.currentPage == 0" ng-click="controller.currentPage=controller.currentPage-1">
+                Previous
+            </md-button>
+            {{controller.currentPage+1}}/{{controller.numberOfPages()}}
+            <md-button ng-disabled="controller.currentPage >= controller.currentItems.length/controller.pageSize - 1" ng-click="controller.currentPage=controller.currentPage+1">
+                Next
+            </md-button><br />
+        </div>
+
+
         <div layout="row" layout-align="start center">
             <md-button class="md-raised md-primary" ng-if="controller.adminStatus" ng-click="controller.goToEditCategories()">Edit Categories</md-button>
         </div>
+
+        <div ng-if="controller.loading">Loading...</div>
+        <div class="error-message" ng-if="controller.error">{{ controller.error }}</div>
 
         <script type="text/ng-template" id="searchItems.dialog.html">
             <form>

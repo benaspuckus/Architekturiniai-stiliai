@@ -8,12 +8,12 @@ angular.module('app')
                 templateUrl: 'pages/browseItems.html',
                 controller: 'BrowseItemsController'
             })
-        .when('/:categoryId',
+        .when('/search/:categoryId',
             {
                 templateUrl: 'pages/browseItems.html',
                 controller: 'BrowseItemsController'
             })
-        .when('/:searchCategoryId/:categoryId/:itemId',
+        .when('/items/:searchCategoryId/:categoryId/:itemId',
             {
                 templateUrl: 'pages/viewItem.html',
                 controller: 'ViewItemController'

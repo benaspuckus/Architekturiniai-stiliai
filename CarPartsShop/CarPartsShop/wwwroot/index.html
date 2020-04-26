@@ -39,12 +39,13 @@
                     <div ng-if="!controller.loggedUserName" layout="row" layout-align="center center">
                         <a href="#!login"><img class="login-icon" ng-src="images/login.png" /></a>
                     </div>
-                    <div class="account-info" ng-if="controller.loggedUserName">
+                    <div class="account-info" layout="row" layout-align="center center" ng-if="controller.loggedUserName">
                         <span>{{controller.loggedUserName}}</span>
                         <img class="login-icon" confirmed-click="controller.logOut()" ng-confirm-click="Are you sure you want to log out?" ng-src="images/logout.png" />
-                        <md-button ng-click="controller.openShoppingCart()">
-                            <md-icon>shopping_cart</md-icon>
-                        </md-button>
+                        <div ng-if="controller.loggedUserName">
+                            <md-icon ng-click="controller.goToShoppingCart()" class="login-icon" style="color: white;">shopping_cart</md-icon>
+                            {{controller.getCartSize() ? controller.getCartSize() : ''}}
+                        </div>
                     </div>
                 </div>
                 <div ng-view></div>
