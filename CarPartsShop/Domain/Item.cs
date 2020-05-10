@@ -37,6 +37,8 @@ namespace Domain
         public string PartNumber { get; private set; }
         public string ImageData { get; private set; }
 
+        public IList<CartItems> CartItems { get; set; }
+
         public void UpdateItem(string name, string description, double price, string partNumber, string oemNumber)
         {
             Name = string.IsNullOrEmpty(name) ? Name : name;

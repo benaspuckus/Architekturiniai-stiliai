@@ -90,10 +90,7 @@ namespace CarPartsShop.Controllers
                 };
 
                 var categoryChildItems = GetCategoryItem(list, new List<Item>());
-                var categoryParentItems = await GetParentItems(category, new List<Item>());
 
-                categoryChildItems.AddRange(categoryParentItems);
-                
 
                 return Ok(categoryChildItems);
             }

@@ -4,9 +4,10 @@ using System.Text;
 
 namespace Domain
 {
-    public enum CategoryType
+    public enum CartStatus
     {
-        MakeModel,
-        Part
+        Requested,
+        Accepted,
+        OrderReady
     }
 }

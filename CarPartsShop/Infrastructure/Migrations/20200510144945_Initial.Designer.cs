@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20200411165040_identity")]
-    partial class identity
+    [Migration("20200510144945_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,7 +52,11 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<string>("OemNumber");
+
                     b.Property<Guid>("ParentCategoryId");
+
+                    b.Property<string>("PartNumber");
 
                     b.Property<double>("Price");
 
@@ -61,6 +65,24 @@ namespace Infrastructure.Migrations
                     b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Item");
+                });
+
+            modelBuilder.Entity("Domain.ShoppingCart", b =>
+                {
+                    b.Property<Guid>("CartId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("DeliveryAddress");
+
+                    b.Property<bool>("NeedsDelivery");
+
+                    b.Property<int>("Status");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("CartId");
+
+                    b.ToTable("ShoppingCart");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

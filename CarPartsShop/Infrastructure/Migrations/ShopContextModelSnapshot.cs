@@ -65,6 +65,24 @@ namespace Infrastructure.Migrations
                     b.ToTable("Item");
                 });
 
+            modelBuilder.Entity("Domain.ShoppingCart", b =>
+                {
+                    b.Property<Guid>("CartId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("DeliveryAddress");
+
+                    b.Property<bool>("NeedsDelivery");
+
+                    b.Property<int>("Status");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("CartId");
+
+                    b.ToTable("ShoppingCart");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")

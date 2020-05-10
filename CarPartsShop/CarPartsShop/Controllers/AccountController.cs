@@ -92,7 +92,6 @@ namespace CarPartsShop.Controllers
             var current = User;
             var email = current.FindFirst(ClaimTypes.Email).Value;
 
-
             return Ok(email);
         }
         [Authorize(Roles = "Admin")]
@@ -109,6 +108,7 @@ namespace CarPartsShop.Controllers
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.NameId, user.Id),
             };
 
             var userRoles = await _userManager.GetRolesAsync(user);

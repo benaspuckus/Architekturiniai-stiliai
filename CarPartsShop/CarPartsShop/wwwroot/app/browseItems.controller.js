@@ -12,14 +12,15 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
     vm.currentItems = null;
     vm.currentPage = 0;
     vm.pageSize = 4;
+    vm.currentPage = 0;
     vm.adminStatus = $rootScope.adminStatus;
     vm.currentCategoryId = $routeParams.categoryId;
     vm.goToEditCategories = goToEditCategories;
     vm.getShoppingCart = getShoppingCart;
+    vm.getOrders = getOrders;
     vm.getCurrentItems = getCurrentItems;
     vm.getAllItems = getAllItems;
     vm.isSimpleUserLoggedIn = isSimpleUserLoggedIn;
-    vm.currentPage = 0;
     vm.getCategoriesForSearch = getCategoriesForSearch;
     vm.showSearch = showSearch;
     vm.addCartItem = addCartItem;
@@ -117,7 +118,25 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
     }
 
     function getShoppingCart() {
+        if (!isSimpleUserLoggedIn()) {
+            $window.location.href = "/";
+        }
+
         vm.cart = JSON.parse($window.localStorage.getItem('cart'));
+    };
+
+    function getOrders() {
+        $http.get("https://localhost:44376/api/Cart", vm.config)
+            .then(function (response) {
+                vm.orders = response.data;
+                console.log(response.data);
+                vm.loading = false;
+            }, function (response) {
+                if (response.status === 401 || response.status === 403) {
+                    $window.location.href = "/";
+                }
+                displayResponseMessage(response);
+            });
     };
 
     function getCurrentItems(id) {

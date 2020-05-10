@@ -23,6 +23,11 @@ angular.module('app')
                 templateUrl: 'pages/editCategories.html',
                 controller: 'CategoriesController'
             })
+        .when('/orders',
+            {
+                templateUrl: 'pages/orders.html',
+                controller: 'BrowseItemsController'
+            })
         .when('/cart',
             {
                 templateUrl: 'pages/shoppingCart.html',
