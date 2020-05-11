@@ -7,7 +7,7 @@ function theming($mdThemingProvider) {
 }
 
 
-function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog, $routeParams) {
+function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog, $routeParams, $scope) {
     var vm = this;
     vm.currentItems = null;
     vm.currentPage = 0;
@@ -22,6 +22,7 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
     vm.getAllItems = getAllItems;
     vm.isSimpleUserLoggedIn = isSimpleUserLoggedIn;
     vm.getCategoriesForSearch = getCategoriesForSearch;
+    vm.confirmPayment = confirmPayment;
     vm.showSearch = showSearch;
     vm.addCartItem = addCartItem;
     vm.hideSearch = hideSearch;
@@ -31,6 +32,8 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
     vm.deleteCartItem = deleteCartItem;
     vm.getTotalSum = getTotalSum;
     vm.cart = null;
+    vm.toggle = toggle;
+    vm.toggledItem = null;
     vm.token = $window.localStorage.getItem('token');
     vm.config = { "headers": { "Authorization": "Bearer " + vm.token } }
 
@@ -77,6 +80,15 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
         $window.localStorage.setItem('cart', JSON.stringify(localCart));
     }
 
+    
+    function toggle(index) {
+        if (vm.toggledItem == index) {
+            vm.toggledItem = null;
+        } else {
+            vm.toggledItem = index;
+        }
+    }
+
     function getTotalSum() {
         var sum = 0;
         var localCart = JSON.parse($window.localStorage.getItem('cart'));
@@ -121,12 +133,11 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
         if (!isSimpleUserLoggedIn()) {
             $window.location.href = "/";
         }
-
         vm.cart = JSON.parse($window.localStorage.getItem('cart'));
     };
 
     function getOrders() {
-        $http.get("https://localhost:44376/api/Cart", vm.config)
+        $http.get("https://localhost:44376/api/Cart/Orders", vm.config)
             .then(function (response) {
                 vm.orders = response.data;
                 console.log(response.data);
@@ -135,6 +146,19 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
                 if (response.status === 401 || response.status === 403) {
                     $window.location.href = "/";
                 }
+                displayResponseMessage(response);
+            });
+    };
+
+    function confirmPayment() {
+        var boolValue = ($scope.delivery == "true");
+        var model = { items: vm.cart, needsDelivery: boolValue, deliveryAddress: $scope.address }
+        console.log(model);
+        $http.post("https://localhost:44376/api/Cart/Confirm", model, vm.config)
+            .then(function (response) {
+                vm.loading = false;
+               // $window.localStorage.removeItem()('cart');
+            }, function (response) {
                 displayResponseMessage(response);
             });
     };

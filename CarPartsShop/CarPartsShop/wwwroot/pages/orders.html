@@ -5,20 +5,38 @@
     <title></title>
 </head>
 <body ng-app="app">
-<div ng-controller="BrowseItemsController as controller" ng-init="controller.getOrders()">
-    <h1>Orders</h1>
-    <div layout="column" layout-align="center center">
-        <div ng-repeat="item in controller.cart track by $index" layout="row" layout-align="center center" style="border-bottom: ridge; margin-top: 10px">
-            <img style="width: 70px; height: 70px; margin-bottom: 5px; margin-right: 15px; " ng-src="{{item.imageData ? item.imageData : 'images/stockImage.png'}}" />
-            <span class="item-info" style="margin-right:15px">{{item.name}}</span>
-            <span class="item-info" style="margin-right: 15px; display: block; width: 500px; word-wrap: break-word">{{item.description}}</span>
-            <span style="color: red">{{item.price}} €</span>
-            <md-icon confirmed-click="controller.deleteCartItem($index)" ng-confirm-click="Are you sure you want to delete this cart item?" class="login-icon" style="margin-left:10px">delete</md-icon>
+    <div ng-controller="BrowseItemsController as controller" ng-init="controller.getOrders()">
+        <h1>Orders</h1>
+        <div layout="column" layout-align="center center">
+            <div layout="row" layout-align="center center">
+                <span class="item-info" style="width: 200px;">Order ID</span>
+                <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">Order Address</span>
+                <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">Order price</span>
+                <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">Status</span>
+            </div>
+            <div ng-repeat="order in controller.orders track by $index" layout="column" layout-align="center center" style="border-bottom: ridge; margin-top: 10px">
+                <div layout="row" layout-align="center center">
+                    <md-list-item ng-click="controller.toggle($index)">
+                        <md-icon>explore</md-icon>
+                        <span class="item-info" style="width: 200px;">{{order.cartId}}</span>
+                        <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">{{order.deliveryAddress ? order.deliveryAddress : 'Local'}}</span>
+                        <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">{{order.price}}€</span>
+                        <span class="item-info" ng-class=" order.status == 0 ? 'red' : order.status == 1 ? 'green' : 'violet'" style="display: block; width: 200px; word-wrap: break-word">{{order.status == 0 ? 'Requested' : order.status == 1 ? 'Accepted' : 'Order ready'}}</span>
+                        <md-icon ng-show="controller.toggledItem != $index">expand_more</md-icon>
+                        <md-icon ng-show="controller.toggledItem == $index">expand_less</md-icon>
+                    </md-list-item>
+
+                </div>
+                <md-list-item ng-repeat="item in order.items" ng-show="controller.toggledItem == $parent.$index">
+                    {{item.name}}
+                    {{item.price}}€
+                </md-list-item>
+
+            </div>
         </div>
-    <div layout="column" layout-align="center center">
-        <span>Already ordered? Check your orders <a href="#!orders">here</a></span>
+        <div layout="column" layout-align="center center">
+        </div>
+        <a href="#!cart"><md-button class="md-raised md-primary">Go back</md-button></a>
     </div>
-    <a href="#!cart"><md-button class="md-raised md-primary">Go back</md-button></a>
-</div>
 </body>
 </html>

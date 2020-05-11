@@ -40,6 +40,8 @@ namespace Infrastructure
         {
             var orders = await _context
                 .ShoppingCarts
+                .Include(x => x.CartItems)
+                .ThenInclude(x => x.Item)
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
 

@@ -21,7 +21,24 @@
                 Total price: {{controller.getTotalSum()}}€
             </span>
         </div>
-
+        <div layout="column" layout-align="center center">
+            <md-radio-group ng-model="delivery">
+                <span>Select delivery method:</span><br /><br />
+                <md-radio-button value="true">Send via post office</md-radio-button>
+                <md-radio-button value="false">Pickup at shop</md-radio-button>
+            </md-radio-group>
+            <md-input-container ng-show="delivery === 'true'">
+                <label>Select post office:</label>
+                <md-select ng-model="address" placeholder="Select office" class="md-no-underline">
+                    <md-option value="SomeStreet 41">SomeStreet 41</md-option>
+                    <md-option value="OtherStreet 222">OtherStreet 222</md-option>
+                    <md-option value="SpeedBoiStreet 79a">SpeedBoiStreet 79a</md-option>
+                </md-select>
+            </md-input-container>
+            
+            <md-button ng-show="delivery" class="md-raised md-primary" confirmed-click="controller.confirmPayment()" ng-confirm-click="Are you sure you want Checkout?" ng-disabled="delivery === 'true' && !address">Confirm Payment</md-button>
+        </div>
+        <br /><br />
         <div layout="column" layout-align="center center">
             <span>Already ordered? Check your orders <a href="#!orders">here</a></span>
         </div>

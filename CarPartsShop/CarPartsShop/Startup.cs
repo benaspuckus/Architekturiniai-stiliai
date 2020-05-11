@@ -63,7 +63,9 @@ namespace CarPartsShop
             services.AddDbContext<ShopContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ShopContextConnectionString")));
             services.AddScoped<ICategoryReadRepository, CategoryReadRepository>();
+            services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddScoped<ICategoryWriteRepository, CategoryWriteRepository>();
+            services.AddScoped<IItemReadRepository, ItemReadRepository>();
             services.AddScoped<ShopContext>();
             services.AddHttpClient();
         }

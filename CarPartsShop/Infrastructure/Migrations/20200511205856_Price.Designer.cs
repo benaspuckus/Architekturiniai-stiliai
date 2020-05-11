@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20200510144945_Initial")]
-    partial class Initial
+    [Migration("20200511205856_Price")]
+    partial class Price
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,24 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Domain.CartItems", b =>
+                {
+                    b.Property<Guid>("CartItemsId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("CartId");
+
+                    b.Property<Guid>("ItemId");
+
+                    b.HasKey("CartItemsId");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("CartItems");
+                });
 
             modelBuilder.Entity("Domain.Category", b =>
                 {
@@ -76,9 +94,12 @@ namespace Infrastructure.Migrations
 
                     b.Property<bool>("NeedsDelivery");
 
+                    b.Property<double>("Price");
+
                     b.Property<int>("Status");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("CartId");
 
@@ -244,6 +265,19 @@ namespace Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Domain.CartItems", b =>
+                {
+                    b.HasOne("Domain.ShoppingCart", "ShoppingCart")
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Item", "Item")
+                        .WithMany("CartItems")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Domain.Category", b =>

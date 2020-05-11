@@ -12,7 +12,7 @@ namespace Infrastructure.EntityTypeConfiguration
         public void Configure(EntityTypeBuilder<CartItems> builder)
         {
             builder.ToTable(nameof(CartItems));
-            builder.HasKey(x => new {x.CartId, x.ItemId});
+            builder.HasKey(x => x.CartItemsId);
             builder.HasOne<Item>(x => x.Item).WithMany(x => x.CartItems).HasForeignKey(x => x.ItemId);
             builder.HasOne<ShoppingCart>(x => x.ShoppingCart).WithMany(x => x.CartItems).HasForeignKey(x => x.CartId);
         }

@@ -72,7 +72,7 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     CartId = table.Column<Guid>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     NeedsDelivery = table.Column<bool>(nullable: false),
                     DeliveryAddress = table.Column<string>(nullable: true)
@@ -212,6 +212,31 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CartItems",
+                columns: table => new
+                {
+                    CartItemsId = table.Column<Guid>(nullable: false),
+                    ItemId = table.Column<Guid>(nullable: false),
+                    CartId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartItems", x => x.CartItemsId);
+                    table.ForeignKey(
+                        name: "FK_CartItems_ShoppingCart_CartId",
+                        column: x => x.CartId,
+                        principalTable: "ShoppingCart",
+                        principalColumn: "CartId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartItems_Item_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Item",
+                        principalColumn: "ItemId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -252,6 +277,16 @@ namespace Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CartItems_CartId",
+                table: "CartItems",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItems_ItemId",
+                table: "CartItems",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Category_ParentCategoryId",
                 table: "Category",
                 column: "ParentCategoryId");
@@ -280,16 +315,19 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Item");
-
-            migrationBuilder.DropTable(
-                name: "ShoppingCart");
+                name: "CartItems");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "ShoppingCart");
+
+            migrationBuilder.DropTable(
+                name: "Item");
 
             migrationBuilder.DropTable(
                 name: "Category");
