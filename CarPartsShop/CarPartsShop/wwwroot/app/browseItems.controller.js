@@ -11,7 +11,7 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
     var vm = this;
     vm.currentItems = null;
     vm.currentPage = 0;
-    vm.pageSize = 4;
+    vm.pageSize = 6;
     vm.currentPage = 0;
     vm.adminStatus = $rootScope.adminStatus;
     vm.currentCategoryId = $routeParams.categoryId;
@@ -24,7 +24,10 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
     vm.getCategoriesForSearch = getCategoriesForSearch;
     vm.confirmPayment = confirmPayment;
     vm.showSearch = showSearch;
+    vm.addItemPrice = addItemPrice;
+    vm.minusItemPrice = minusItemPrice;
     vm.addCartItem = addCartItem;
+    vm.goToOrders = goToOrders;
     vm.hideSearch = hideSearch;
     vm.confirmSearch = confirmSearch;
     vm.numberOfPages = numberOfPages;
@@ -76,8 +79,31 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
         if (!localCart) {
             localCart = [];
         }
-        localCart.push(item);
+        if (item.count) {
+            for (var i = 0; i < item.count; i++) {
+                localCart.push(item);
+            }
+        }
+        else {
+            localCart.push(item);
+        }
+        
         $window.localStorage.setItem('cart', JSON.stringify(localCart));
+        $window.location.reload();
+    }
+
+    function addItemPrice(item) {
+        if (item.count) {
+            item.count ++;
+        } else {
+            item.count = 2;
+        }
+    }
+
+    function minusItemPrice(item) {
+        if (item.count && item.count >1) {
+            item.count--;
+        }
     }
 
     
@@ -87,6 +113,10 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
         } else {
             vm.toggledItem = index;
         }
+    }
+
+    function goToOrders() {
+        $location.path("/manageOrders");
     }
 
     function getTotalSum() {
@@ -133,14 +163,33 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
         if (!isSimpleUserLoggedIn()) {
             $window.location.href = "/";
         }
-        vm.cart = JSON.parse($window.localStorage.getItem('cart'));
+
+        var cart = JSON.parse($window.localStorage.getItem('cart'));
+        var cartList = [];
+        var counts = {};
+
+       
+            cart.forEach(function (x) {
+                var key = x.itemId;
+                counts[key] = (counts[key] || 0) + 1;
+            });
+
+        const entries = Object.entries(counts);
+
+        for (const [item, count] of entries) {
+
+            var singleItem = cart.find(x => x.itemId === item);
+            singleItem.count = count;
+            cartList.push(singleItem);
+        }
+
+        vm.cart = cartList;
     };
 
     function getOrders() {
         $http.get("https://localhost:44376/api/Cart/Orders", vm.config)
             .then(function (response) {
                 vm.orders = response.data;
-                console.log(response.data);
                 vm.loading = false;
             }, function (response) {
                 if (response.status === 401 || response.status === 403) {
@@ -150,14 +199,29 @@ function BrowseItemsController($window, $http, $location, $rootScope, $mdDialog,
             });
     };
 
-    function confirmPayment() {
+    function confirmPayment(ev) {
         var boolValue = ($scope.delivery == "true");
-        var model = { items: vm.cart, needsDelivery: boolValue, deliveryAddress: $scope.address }
-        console.log(model);
+        var model = { items: JSON.parse($window.localStorage.getItem('cart')), needsDelivery: boolValue, deliveryAddress: $scope.address }
         $http.post("https://localhost:44376/api/Cart/Confirm", model, vm.config)
             .then(function (response) {
                 vm.loading = false;
-               // $window.localStorage.removeItem()('cart');
+                var id = response.data;
+                var slicedId = id.slice(31, 36);
+                console.log(id);
+                vm.confirmedCart = { id: slicedId, sum: getTotalSum()};
+                $window.localStorage.removeItem('cart');
+                $mdDialog.show({
+                    controller: function() {
+                        return vm;
+                    },
+                    controllerAs: 'controller',
+                    templateUrl: 'confirmPayment.dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: false
+                }).then(function () {
+                    $window.location.href = "/";
+                });;
             }, function (response) {
                 displayResponseMessage(response);
             });

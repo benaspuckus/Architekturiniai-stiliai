@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <div ng-controller="ManageOrdersController as controller" ng-init="controller.getOrders()">
+        <div ng-cloak>
+            <md-content>
+                <md-tabs md-dynamic-height md-border-bottom>
+                    <md-tab label="Requested">
+                        <md-content class="md-padding">
+                            <div layout="column" layout-align="center center">
+                                <div layout="row" layout-align="center center">
+                                    <span class="item-info" style="width: 200px;">Order ID</span>
+                                    <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">Order Address</span>
+                                    <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">Order price</span>
+                                    <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">Status</span>
+                                </div>
+                                <div ng-repeat="order in controller.requestedOrders track by $index" layout="column" layout-align="center center" style="border-bottom: ridge; margin-top: 10px">
+                                    <div layout="column" layout-align="center start">
+                                        <md-list-item ng-click="controller.toggle($index)">
+                                            <md-icon>explore</md-icon>
+                                            <span class="item-info" style="width: 200px;">{{order.cartId}}</span>
+                                            <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">{{order.deliveryAddress ? order.deliveryAddress : 'Local'}}</span>
+                                            <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">{{order.price}}€</span>
+                                            <span class="item-info" ng-class="'red'" style="display: block; width: 200px; word-wrap: break-word">{{order.status == 0 ? 'Requested' : order.status == 1 ? 'Accepted' : 'Order ready'}}</span>
+                                            <md-icon ng-show="controller.toggledItem != $index">expand_more</md-icon>
+                                            <md-icon ng-show="controller.toggledItem == $index">expand_less</md-icon>
+                                        </md-list-item>
+                                    </div>
+                                    <md-list-item ng-show="controller.toggledItem == $index">
+                                        <md-button class="md-raised md-primary" confirmed-click="controller.moveToProgress(order)" ng-confirm-click="Are you sure you want make this item status IN PROGRESS?">In progress</md-button>
+                                        <md-button class="md-raised md-primary" confirmed-click="controller.moveToFinished(order)" ng-confirm-click="Are you sure you want make this item status FINISHED?">Finished</md-button>
+                                    </md-list-item>
+                                </div>
+                            </div><br /><br />
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="In progress">
+                        <md-content class="md-padding">
+                            <div layout="column" layout-align="center center">
+                                <div layout="row" layout-align="center center">
+                                    <span class="item-info" style="width: 200px;">Order ID</span>
+                                    <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">Order Address</span>
+                                    <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">Order price</span>
+                                    <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">Status</span>
+                                </div>
+                                <div ng-repeat="order in controller.acceptedOrders track by $index" layout="column" layout-align="center center" style="border-bottom: ridge; margin-top: 10px">
+                                    <div layout="column" layout-align="center start">
+                                        <md-list-item ng-click="controller.toggle($index)">
+                                            <md-icon>explore</md-icon>
+                                            <span class="item-info" style="width: 200px;">{{order.cartId}}</span>
+                                            <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">{{order.deliveryAddress ? order.deliveryAddress : 'Local'}}</span>
+                                            <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">{{order.price}}€</span>
+                                            <span class="item-info" ng-class="'violet'" style="display: block; width: 200px; word-wrap: break-word">{{order.status == 0 ? 'Requested' : order.status == 1 ? 'Accepted' : 'Order ready'}}</span>
+                                            <md-icon ng-show="controller.toggledItem != $index">expand_more</md-icon>
+                                            <md-icon ng-show="controller.toggledItem == $index">expand_less</md-icon>
+                                        </md-list-item>
+
+                                    </div>
+                                    <md-list-item ng-show="controller.toggledItem == $index">
+                                        <md-button class="md-raised md-primary" confirmed-click="controller.moveToFinished(order)" ng-confirm-click="Are you sure you want make this item status FINISHED?">Finished</md-button>
+                                    </md-list-item>
+                                </div>
+                            </div><br /><br />
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Finished">
+                        <md-content class="md-padding">
+                            <div layout="column" layout-align="center center">
+                                <div layout="row" layout-align="center center">
+                                    <span class="item-info" style="width: 200px;">Order ID</span>
+                                    <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">Order Address</span>
+                                    <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">Order price</span>
+                                    <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">Status</span>
+                                </div>
+                                <div ng-repeat="order in controller.finishedOrders track by $index" layout="column" layout-align="center center" style="border-bottom: ridge; margin-top: 10px">
+                                    <div layout="column" layout-align="center start">
+                                        <md-list-item ng-click="controller.toggle($index)">
+                                            <md-icon>explore</md-icon>
+                                            <span class="item-info" style="width: 200px;">{{order.cartId}}</span>
+                                            <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">{{order.deliveryAddress ? order.deliveryAddress : 'Local'}}</span>
+                                            <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">{{order.price}}€</span>
+                                            <span class="item-info" ng-class="'green' " style="display: block; width: 200px; word-wrap: break-word">{{order.status == 0 ? 'Requested' : order.status == 1 ? 'Accepted' : 'Order ready'}}</span>
+                                            <md-icon ng-show="controller.toggledItem != $index">expand_more</md-icon>
+                                            <md-icon ng-show="controller.toggledItem == $index">expand_less</md-icon>
+                                        </md-list-item>
+                                    </div>
+                                </div>
+                            </div><br /><br />
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </md-content>
+            <br /><br />
+            <a href="#!"><md-button class="md-raised md-primary">Go back</md-button></a>
+        </div>
+    </div>
+</body>
+</html>

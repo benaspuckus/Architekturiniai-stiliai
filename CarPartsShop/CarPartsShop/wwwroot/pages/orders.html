@@ -15,13 +15,13 @@
                 <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">Status</span>
             </div>
             <div ng-repeat="order in controller.orders track by $index" layout="column" layout-align="center center" style="border-bottom: ridge; margin-top: 10px">
-                <div layout="row" layout-align="center center">
+                <div layout="column" layout-align="center start">
                     <md-list-item ng-click="controller.toggle($index)">
                         <md-icon>explore</md-icon>
                         <span class="item-info" style="width: 200px;">{{order.cartId}}</span>
                         <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">{{order.deliveryAddress ? order.deliveryAddress : 'Local'}}</span>
                         <span class="item-info" style="display: block; width: 200px; word-wrap: break-word">{{order.price}}€</span>
-                        <span class="item-info" ng-class=" order.status == 0 ? 'red' : order.status == 1 ? 'green' : 'violet'" style="display: block; width: 200px; word-wrap: break-word">{{order.status == 0 ? 'Requested' : order.status == 1 ? 'Accepted' : 'Order ready'}}</span>
+                        <span class="item-info" ng-class=" order.status == 0 ? 'red' : order.status == 1 ? 'violet' : 'green'" style="display: block; width: 200px; word-wrap: break-word">{{order.status == 0 ? 'Requested' : order.status == 1 ? 'Accepted' : 'Order ready'}}</span>
                         <md-icon ng-show="controller.toggledItem != $index">expand_more</md-icon>
                         <md-icon ng-show="controller.toggledItem == $index">expand_less</md-icon>
                     </md-list-item>
@@ -33,9 +33,7 @@
                 </md-list-item>
 
             </div>
-        </div>
-        <div layout="column" layout-align="center center">
-        </div>
+        </div><br/><br/>
         <a href="#!cart"><md-button class="md-raised md-primary">Go back</md-button></a>
     </div>
 </body>

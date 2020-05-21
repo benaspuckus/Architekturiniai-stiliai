@@ -52,6 +52,8 @@ namespace Infrastructure
         {
             var orders = await _context
                 .ShoppingCarts
+                .Include(x => x.CartItems)
+                .ThenInclude(x => x.Item)
                 .ToListAsync();
 
             return orders;

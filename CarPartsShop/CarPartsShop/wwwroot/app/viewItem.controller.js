@@ -25,11 +25,12 @@ function ViewItemController($routeParams, $window, $http, $location) {
 
     function goBack() {
         var id = vm.searchCategoryId;
+        console.log(id);
         if (vm.searchCategoryId === 'undefined') {
             id = "";
         }
 
-        $location.path("/" + id);
+        $location.path("/search/" + id);
     };
 
     function displayResponseMessage(response) {

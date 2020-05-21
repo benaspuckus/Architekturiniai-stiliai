@@ -15,7 +15,12 @@
                 <div layout-padding="" layout="column" layout-align="center center">
                     <img class="item-image" ng-click="controller.goToItemInfo(item)" ng-src="{{item.imageData ? item.imageData : 'images/stockImage.png'}}" />
                     <span class="item-info">{{item.name}}</span>
-                    <span style="color: red">{{item.price}} €</span>
+                    <div layout="row" layout-align="center center">
+                        <md-icon class="login-icon" style="color:red;" ng-click="controller.minusItemPrice(item)">arrow_back</md-icon>
+                        <span style="color: red; margin-right: 10px">{{item.price}} €</span>
+                        <md-icon class="login-icon" style="color:red;" ng-click="controller.addItemPrice(item)">arrow_forward</md-icon>
+                        <span style="color: red; margin-left: 10px" ng-if="item.count && item.count>1">x{{item.count}}</span>
+                    </div>
                     <md-button ng-if="controller.isSimpleUserLoggedIn()" confirmed-click="controller.addCartItem(item)" ng-confirm-click="Are you sure you want to add to cart?">Add to cart</md-button>
                 </div>
 
@@ -35,6 +40,7 @@
 
         <div layout="row" layout-align="start center">
             <md-button class="md-raised md-primary" ng-if="controller.adminStatus" ng-click="controller.goToEditCategories()">Edit Categories</md-button>
+            <md-button class="md-raised md-primary" ng-if="controller.adminStatus" ng-click="controller.goToOrders()">Manage Orders</md-button>
         </div>
 
         <div ng-if="controller.loading">Loading...</div>
@@ -74,8 +80,26 @@
                     <md-button class="md-raised md-primary" ng-click="controller.confirmSearch(search)">Search</md-button>
                 </div>
             </form>
+        </script>
 
-
+        <script type="text/ng-template" id="confirmPayment.dialog.html">
+            <form>
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>Payment information</h2>
+                        <span flex></span>
+                        <md-button ng-click="controller.hideSearch()">
+                            <md-icon>highlight_off</md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <div layout="column" layout-align="center center">
+                    <div layout="row">
+                        <p>To finish payment, please send {{controller.confirmedCart.sum}}€ to our Bank account: <br /> LT70144218435781887 UAB "Not shady company" <br /> Also don't forget to specify payment purpose <strong>with 5 last digits of your cart ID</strong> {{controller.confirmedCart.id}}</p>
+                    </div>
+                    <img class="item-image" ng-src="images/confirm.png" />
+                </div>
+            </form>
         </script>
     </div>
 
