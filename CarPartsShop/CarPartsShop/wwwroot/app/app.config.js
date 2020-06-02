@@ -63,5 +63,10 @@ angular.module('app')
                 templateUrl: 'pages/aboutUs.html',
                 controller: 'BrowseItemsController'
             })
+        .when('/howToBuy',
+            {
+                templateUrl: 'pages/howToBuy.html',
+                controller: 'BrowseItemsController'
+            })
         .otherwise('/');
 });
